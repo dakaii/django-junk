@@ -24,7 +24,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "^ab3n9-*_87@zr=yu2uo!h6+bp(=x#q&h6r0og5@f(_20uov=c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Application definition
 
@@ -36,8 +36,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
-    'chime',
-    'rest_framework'
+    'lessons',
+    'rest_framework',
+    'gunicorn'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -76,18 +77,31 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-#        'ENGINE': 'django.db.backends.sqlite3',
-#        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'chime',
-        'USER': 'chimeAdmin',
-        'PASSWORD': 'kinkon',
-        'HOST': '',  
-        'PORT': '5432',
+# Update database configuration with $DATABASE_URL.
+#if not 'DATABASE_URL' in os.environ:
+#    os.environ['DATABASE_URL'] = 'postgres://qdvhboeogqfxst:aX1EdOLLTEn81yj7492fK2_aQ_@ec2-107-21-101-67.compute-1.amazonaws.com:5432/dbuh639t95mo72'
+if not DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'dbuh639t95mo72',
+            'USER': 'qdvhboeogqfxst',
+            'PASSWORD': 'aX1EdOLLTEn81yj7492fK2_aQ_',
+            'HOST': 'ec2-107-21-101-67.compute-1.amazonaws.com',  
+            'PORT': '5432',
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'chime',
+            'USER': '',
+            'PASSWORD': '',
+            'HOST': '',  
+            'PORT': '',
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = (
     {
@@ -107,15 +121,13 @@ AUTH_PASSWORD_VALIDATORS = (
 # Internationalization
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+#LANGUAGE_CODE = 'en-us'
+#TIME_ZONE = 'UTC'
+LANGUAGE_CODE = 'ja'
+TIME_ZONE = 'Asia/Tokyo'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
-# Update database configuration with $DATABASE_URL.
-db_from_env = dj_database_url.config(conn_max_age=500)
-DATABASES['default'].update(db_from_env)
 
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')

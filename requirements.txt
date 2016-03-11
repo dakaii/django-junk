@@ -11,6 +11,7 @@ Flask==0.10.1
 Flask-REST==1.1
 Flask-SQLAlchemy==2.1
 gunicorn==19.4.5
+httpie==0.9.3
 itsdangerous==0.24
 Jinja2==2.8
 macholib==1.5.1

@@ -1,3 +1,4 @@
 venv
 *.pyc
 staticfiles
+__pycache__

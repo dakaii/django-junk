@@ -8,6 +8,5 @@ class Lesson(models.Model):
 	description = models.TextField(max_length=200)
 	lesson_detail = models.TextField(max_length=200)
 	timestamp = models.DateTimeField(auto_now_add=True)
-	created = models.DateTimeField(auto_now_add=True)
-	class Meta:
-		ordering = ('created',)
+#	class Meta:
+#		ordering = ('timestamp',)
