@@ -128,7 +128,6 @@ TIME_ZONE = 'Asia/Tokyo'
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
@@ -155,5 +154,6 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'UNICODE_JSON': True
     ]
 }
