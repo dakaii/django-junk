@@ -1,9 +1,19 @@
 from rest_framework import serializers
-from lessons.models import Lesson
+from django.contrib.auth.models import User
+from .models import Lesson
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
-class LessonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Lesson
-        fields = ('id','lesson_name','description','lesson_detail','timestamp')
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+	lessons = serializers.HyperlinkedRelatedField(many=True, view_name='lesson-detail', read_only=True)
+	class Meta:
+	    model = User
+	    fields = ('url', 'username', 'lessons')
+
+class LessonSerializer(serializers.HyperlinkedModelSerializer):
+	owner = serializers.ReadOnlyField(source='owner.username')
+	class Meta:
+		model = Lesson
+		fields = ('url','lesson_name','description','lesson_detail','timestamp','owner')
+

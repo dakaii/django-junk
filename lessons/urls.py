@@ -1,10 +1,52 @@
-from django.conf.urls import url
+from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
-from lessons import views
+from .views import  LessonViewSet, UserViewSet, api_root
+from rest_framework.routers import DefaultRouter
+from rest_framework import renderers
 
+
+# Create a router and register our viewsets with it.
+router = DefaultRouter()
+router.register(r'lessons', LessonViewSet)
+router.register(r'users', UserViewSet)
+
+# The API URLs are now determined automatically by the router.
+# Additionally, we include the login URLs for the browsable API.
 urlpatterns = [
-    url(r'^lessons/$',views.LessonList.as_view()),
-    url(r'^lessons/(?P<pk>[0-9]+)/$',views.LessonDetail.as_view()),
-    ]
+    url(r'^', include(router.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+]
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+"""
+lesson_list = LessonViewSet.as_view({
+	'get':'list'
+	'post':'create'
+	})
+lesson_detail = LessonViewSet.as_view({
+	'get':'retrieve'
+	'put':'update'
+	'patch':'partial_update'
+	'delete':'destroy'
+	})
+user_list = UserViewSet.as_view({
+	'get':'list'
+	})
+user_detail = UserViewSet.as_view({
+	'get':'retrieve'
+	})
+
+#API endpoints
+urlpatterns = format_suffix_patterns([
+	url(r'^$',views.api_root),
+    url(r'^lessons/$', lesson_list,name='lesson-list'),
+    url(r'^lessons/(?P<pk>[0-9]+)/$',lesson_detail,name='lesson-detail'),
+    url(r'^users/$', user_list,name='user-list'),
+	url(r'^users/(?P<pk>[0-9]+)/$', user_detail,name='user-detail'),
+    ])
+
+# Login and logout views for the browsable API
+urlpatterns += [
+    url(r'^api-auth/', include('rest_framework.urls',
+                               namespace='rest_framework')),
+]
+"""
