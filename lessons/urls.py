@@ -1,20 +1,31 @@
 from django.conf.urls import url, include
+from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
-from .views import  LessonViewSet, UserViewSet, api_root
+from lessons import views
+from .views import LessonViewSet, UserViewSet, UserDetailViewSet, SignUp
+from .views import SchoolViewSet, SchoolOwnerViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework import renderers
 
-
+admin.autodiscover()
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r'lessons', LessonViewSet)
 router.register(r'users', UserViewSet)
+router.register(r'user_detail', UserDetailViewSet)
+router.register(r'schools', SchoolViewSet)
+router.register(r'school_owners', SchoolOwnerViewSet)
 
 # The API URLs are now determined automatically by the router.
 # Additionally, we include the login URLs for the browsable API.
 urlpatterns = [
     url(r'^', include(router.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework'))
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')), 
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    url(r'^sign_up/$', SignUp.as_view(), name="sign_up"),
+    url(r'^accounts/', include('registration.backends.simple.urls')),
+    url(r'^admin/', include(admin.site.urls)),
+
 ]
 
 """
