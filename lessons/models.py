@@ -3,11 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
 
-class CustomUser(AbstractUser):
-	class Meta:
-		db_table = 'auth_user'
 
-class User(CustomUser):
+class User(AbstractUser):
 	likeCount_lesson = models.IntegerField(default=0)
 #	fav_courseID = models.ManyToManyField(Course, related_name='courses')
 	ownerFlg = models.BooleanField(default=False)
@@ -16,14 +13,14 @@ class User(CustomUser):
 		return '%d: %s'%(self.id, self.username)
 
 
-
 class UserDetail(models.Model):
-	user = models.OneToOneField(User, related_name='user')
+	user = models.OneToOneField(User, related_name='user_detail')
 	address = models.CharField(max_length=500)
 	phoneNumber = models.IntegerField()
 
 
-class SchoolOwner(CustomUser):
+class SchoolOwner(models.Model):
+	user = models.OneToOneField(User, related_name='school_owner')
 	chime_plan = models.CharField(max_length=50)
 	def __str__(self):
 		return 'username: %s, first_name: %s, last_name: %s' %(self.username, self.first_name, self.last_name)
@@ -59,15 +56,15 @@ class Tutor(models.Model):
 	def __str__(self):
 		return 'id: %s, first_name: %s, last_name: %s' %(self.id, self.first_name, self.last_name)
 
+class Book(models.Model):
+	user = models.ForeignKey(User, related_name = "book_owner")
+#	area = models.ForeignKey(Area, related_name='place')
 
-#class Area(models.Model):
-#	areaID = models.CharField()
-#	area_name = models.CharField(max_length=100)
-#	parent_areaID = models.IntegerField()
-#	parent_area_name = models.CharField(max_length=100)
-
-
-
+class Area(models.Model):
+	areaID = models.CharField(max_length=100)
+	area_name = models.CharField(max_length=100)
+	parent_areaID = models.IntegerField()
+	parent_area_name = models.CharField(max_length=100)
 
 
 

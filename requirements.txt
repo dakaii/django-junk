@@ -38,6 +38,7 @@ python-social-auth==0.2.14
 python3-openid==3.0.9
 requests==2.9.1
 requests-oauthlib==0.6.1
+rest-social-auth==0.4.3
 six==1.4.1
 SQLAlchemy==1.0.12
 static3==0.6.1

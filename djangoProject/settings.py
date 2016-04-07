@@ -24,7 +24,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "^ab3n9-*_87@zr=yu2uo!h6+bp(=x#q&h6r0og5@f(_20uov=c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -40,6 +40,9 @@ INSTALLED_APPS = (
     'oauth2_provider',
     'lessons',
     'rest_framework',
+    'rest_framework.authtoken',
+    'social.apps.django_app.default',
+    'rest_social_auth',
     'gunicorn',
     'corsheaders',
 )
@@ -61,7 +64,7 @@ ROOT_URLCONF = 'djangoProject.urls'
 TEMPLATES = (
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'djangoProject/template/registration'),os.path.join(BASE_DIR, 'djangoProject/template/')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -102,7 +105,7 @@ else:
             'NAME': 'chime',
             'USER': '',
             'PASSWORD': '',
-            'HOST': '',  
+            'HOST': 'localhost',  
             'PORT': '',
         }
     }
@@ -143,6 +146,8 @@ ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
+LOGIN_REDIRECT_URL = '/login/'
+LOGOUT_URL = '/logout/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = [
@@ -157,11 +162,13 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+    #    'rest_framework.permissions.IsAdminUser',
     ],
     'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.ext.rest_framework.OAuth2Authentication',),
 }
 
-AUTH_USER_MODEL = 'lessons.CustomUser'
+AUTH_USER_MODEL = 'lessons.User'
+

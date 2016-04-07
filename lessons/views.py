@@ -9,6 +9,7 @@ from .serializers import SchoolOwnerSerializer
 from .permissions import IsOwnerOrReadOnly, IsAuthenticatedOrCreate
 from rest_framework import generics, renderers, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from django.contrib.auth.decorators import login_required
 
 
 #@api_view(('GET',))
@@ -28,20 +29,19 @@ class SchoolViewSet(viewsets.ModelViewSet):
     serializer_class = SchoolSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
+@login_required
 class SchoolOwnerViewSet(viewsets.ModelViewSet):
     queryset = SchoolOwner.objects.all()
     serializer_class = SchoolOwnerSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)    
 
-#class UserViewSet(viewsets.ReadOnlyModelViewSet):
-class UserViewSet(viewsets.ModelViewSet):
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)    
 
-
-#class UserDetailViewSet(viewsets.ReadOnlyModelViewSet):
-class UserDetailViewSet(viewsets.ModelViewSet):
+@login_required
+class UserDetailViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = UserDetail.objects.all()
     serializer_class = UserDetailSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)    

@@ -1,6 +1,7 @@
 from django.conf.urls import url, include
 from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
+from django.contrib.auth import views as auth_views
 from lessons import views
 from .views import LessonViewSet, UserViewSet, UserDetailViewSet, SignUp
 from .views import SchoolViewSet, SchoolOwnerViewSet
@@ -25,7 +26,8 @@ urlpatterns = [
     url(r'^sign_up/$', SignUp.as_view(), name="sign_up"),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^admin/', include(admin.site.urls)),
-
+    url(r'^login/$', auth_views.login),
+    url(r'^logout/$', auth_views.logout),
 ]
 
 """
