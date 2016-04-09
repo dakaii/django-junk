@@ -39,7 +39,10 @@ class Lesson(models.Model):
 	lesson_name = models.CharField(max_length=100)
 	description = models.TextField(max_length=200)
 	lesson_detail = models.TextField(max_length=200)
-	timestamp = models.DateTimeField(auto_now_add=True)
+#	timestamp = models.DateTimeField(auto_now_add=True)
+	start_time = models.TimeField(blank=True)
+	end_time = models.TimeField(blank=True)
+	date = models.DateField(blank=True)
 	school = models.ForeignKey(School, related_name = "lesson")
 
 	def __str__(self):
@@ -56,16 +59,16 @@ class Tutor(models.Model):
 	def __str__(self):
 		return 'id: %s, first_name: %s, last_name: %s' %(self.id, self.first_name, self.last_name)
 
-class Book(models.Model):
-	user = models.ForeignKey(User, related_name = "book_owner")
-#	area = models.ForeignKey(Area, related_name='place')
-
 class Area(models.Model):
 	areaID = models.CharField(max_length=100)
 	area_name = models.CharField(max_length=100)
 	parent_areaID = models.IntegerField()
 	parent_area_name = models.CharField(max_length=100)
 
+class Booking(models.Model):
+	user = models.ForeignKey(User, related_name = "booking_user")
+	lesson = models.ForeignKey(Lesson, related_name = "booking_lesson")
+	area = models.ForeignKey(Area, related_name='booking_place')
 
 
 

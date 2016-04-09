@@ -1,11 +1,12 @@
-from .models import Lesson, User, UserDetail, School, SchoolOwner
+from .models import Lesson, User, UserDetail, School, SchoolOwner, Booking
 #from django.contrib.auth.models import User
 from rest_framework.decorators import api_view, detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
-from .serializers import LessonSerializer, UserSerializer, UserDetailSerializer, SignUpSerializer, SchoolSerializer
-from .serializers import SchoolOwnerSerializer
+from .serializers import LessonSerializer, UserSerializer, UserDetailSerializer, SchoolSerializer
+from .serializers import SchoolOwnerSerializer, BookingSerializer
+#from .serializers import SignUpSerializer
 from .permissions import IsOwnerOrReadOnly, IsAuthenticatedOrCreate
 from rest_framework import generics, renderers, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
@@ -44,10 +45,20 @@ class UserViewSet(viewsets.ReadOnlyModelViewSet):
 class UserDetailViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = UserDetail.objects.all()
     serializer_class = UserDetailSerializer
-    permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)    
+    permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly) 
+
+class BookingViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset =Booking.objects.all()
+    serializer_class = BookingSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
 
+
+"""
 class SignUp(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = SignUpSerializer
     permission_classes = (IsAuthenticatedOrCreate,)
+"""
+
+

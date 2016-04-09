@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'lessons',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_social_oauth2',
     'social.apps.django_app.default',
     'rest_social_auth',
     'gunicorn',
@@ -64,7 +65,7 @@ ROOT_URLCONF = 'djangoProject.urls'
 TEMPLATES = (
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'djangoProject/template/registration'),os.path.join(BASE_DIR, 'djangoProject/template/')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,6 +73,8 @@ TEMPLATES = (
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social.apps.django_app.context_processors.backends',
+                'social.apps.django_app.context_processors.login_redirect',
             ],
             'debug': DEBUG,
         },
@@ -146,8 +149,6 @@ ALLOWED_HOSTS = ['*']
 
 STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 STATIC_URL = '/static/'
-LOGIN_REDIRECT_URL = '/login/'
-LOGOUT_URL = '/logout/'
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = [
@@ -167,8 +168,48 @@ REST_FRAMEWORK = {
     ],
     'PAGE_SIZE': 10,
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'oauth2_provider.ext.rest_framework.OAuth2Authentication',),
+        'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+        'rest_framework_social_oauth2.authentication.SocialAuthentication',
+        ),
 }
 
 AUTH_USER_MODEL = 'lessons.User'
+
+AUTHENTICATION_BACKENDS = (
+        # Facebook OAuth2
+    'social.backends.facebook.FacebookAppOAuth2',
+    'social.backends.facebook.FacebookOAuth2',
+    'social.backends.facebook.Facebook2OAuth2',
+    'social.backends.open_id.OpenIdAuth',
+    'social.backends.google.GoogleOpenId',
+    'social.backends.google.GoogleOAuth2',
+    'social.backends.google.GoogleOAuth',
+    'social.backends.twitter.TwitterOAuth',
+    'social.backends.yahoo.YahooOpenId',
+    'rest_framework_social_oauth2.backends.DjangoOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+"""
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'social.apps.django_app.context_processors.backends',
+    'social.apps.django_app.context_processors.login_redirect',
+)
+"""
+# Facebook configuration
+SOCIAL_AUTH_FACEBOOK_KEY = '640270719458713'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'ce8ba5f8607988faace4591f87cdba49'
+
+# Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from facebook. Email is not sent by default, to get it, you must request the email permission:
+SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
+"""
+SOCIAL_AUTH_TWITTER_KEY = 'Your Twitter Key'
+SOCIAL_AUTH_TWITTER_SECRET = 'Your Twitter Secret'
+"""
+# https://github.com/st4lk/django-rest-social-auth
+# https://github.com/PhilipGarnero/django-rest-framework-social-oauth2
+# https://pypi.python.org/pypi/django-socialprofile/0.2.2#facebook
+
+
 

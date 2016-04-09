@@ -3,7 +3,7 @@ bdist-mpkg==0.5.0
 defusedxml==0.4.1
 dj-database-url==0.4.0
 dj-static==0.0.6
-Django==1.9.2
+Django==1.9.5
 django-braces==1.8.1
 django-cors-headers==1.1.0
 django-extensions==1.6.1
@@ -39,7 +39,7 @@ python3-openid==3.0.9
 requests==2.9.1
 requests-oauthlib==0.6.1
 rest-social-auth==0.4.3
-six==1.4.1
+six==1.10.0
 SQLAlchemy==1.0.12
 static3==0.6.1
 stevedore==1.11.0
