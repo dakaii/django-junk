@@ -1,16 +1,23 @@
 import requests
+import json
 from urllib.parse import urlparse, parse_qs
+from django.contrib.auth import authenticate, login
+from django.forms.models import model_to_dict
 
+
+from rest_framework import status
 from .models import User
 from .serializers import SignUpSerializer
 from rest_framework import generics, renderers, viewsets
 from oauth2_provider.views.generic import ProtectedResourceView
-from social.backends.oauth import BaseOAuth1, BaseOAuth2
+#from social.backends.oauth import BaseOAuth1, BaseOAuth2
 from social.exceptions import AuthAlreadyAssociated
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
 from .permissions import IsOwnerOrReadOnly, IsAuthenticatedOrCreate
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.decorators import detail_route, list_route
+
 
 
 
@@ -23,32 +30,57 @@ query = parse_qs(parse_result.query)
 access_token = query['access_token'][0]
 print(access_token)
 
+access_token='EAAJGUqTLHZAkBADnruUh3dcVJenZAEQQotEbZBW6BEfLzWPi6bKm0P4YXdbBvBCkTJpjk2W82IJBhLXZB2CVF0Tx24UDjKgbQxhRLIStGwlHNLco1Uj6aclsPTZBtdRbrOQTYjHo0eYR86Mr1RxvDUCTiYgO37h6TK2knj0gxFgZDZD'
 graph_query = "https://graph.facebook.com/v2.6/me?fields=id%2Cname%2Clocation%2Cbirthday&access_token={0}".format(access_token)
 
 user_data = requests.get(graph_query)
-user_data.text
-print(user_data.data["name"])
+
 """
 
 
 
 
-class Login(viewsets.ModelViewSet):
+class Login(generics.CreateAPIView):
 	queryset = User.objects.all()
 	serializer_class = SignUpSerializer
-	def get(self, request):
-		try:
+	permission_classes = (IsAuthenticatedOrCreate,)
+
+	def create(self, request):
+		if request.GET.get('access_token'):
 			access_token = request.GET.get('access_token')
-			return HttpResponse(access_token)
-		except ValueError:
-			return HttpResponse("Error")
+			graph_query = "https://graph.facebook.com/v2.6/me?fields=id%2Cname%2Clocation%2Cbirthday&access_token={0}".format(access_token)
+			try:
+				user_data = requests.get(graph_query)
+				user_jsonData=user_data.json()
+				try:
+					user=User.objects.get(id=user_jsonData['id'])
+
+				except User.DoesNotExist:
+					user =User(username=user_jsonData['name'],id=int(user_jsonData['id']))
+					user.save()
+					#I might need to make two separate cases for tutors and tutees.
+					#I need to generate a random and unique password for each user.
+			user=model_to_dict(user)
+			user = authenticate(username=user['username'], password=user['password'])
+			#login(request, user)
+			except ConnectionError as e:    # This is the correct syntax
+				return Response({"errors": "Error with social authentication"},
+							status=status.HTTP_400_BAD_REQUEST)
+		else:
+			return Response({"errors": "Error with social authentication"},
+							status=status.HTTP_400_BAD_REQUEST)
 
 
-@login_required
+
+
+
+#@detail_route(methods=['post'])
+#@login_required
 class Logout(viewsets.ModelViewSet):
 	queryset = User.objects.all()
 	serializer_class = SignUpSerializer	
-	def put(self):
+	@login_required
+	def destroy(self, request, pk=None):
 		return HttpResponse('Protected with OAuth2!')
 	
 

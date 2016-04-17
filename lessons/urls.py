@@ -19,8 +19,8 @@ router.register(r'user_detail', UserDetailViewSet)
 router.register(r'schools', SchoolViewSet)
 router.register(r'school_owners', SchoolOwnerViewSet)
 router.register(r'bookings', BookingViewSet)
-router.register(r'login', Login)
-router.register(r'logout', Logout)
+#router.register(r'login', Login)
+#router.register(r'logout', Logout)
 
 
 # The API URLs are now determined automatically by the router.
@@ -41,4 +41,7 @@ urlpatterns = [
 #	url(r'^api/login/', include('rest_social_auth.urls_token')),
 #	url(r'^social_sign_up/$', views.SocialSignUp.as_view(), name="social_sign_up"),
 #	url(r'^auth/', include('django.contrib.auth.urls', namespace='auth')),
+	url(r'^authentication/$', Login.as_view(), name="authentication"),
+#	url(r'^logout/$', Logout.as_view(), name="logout"),
+
 ]

@@ -8,6 +8,7 @@ class Area(models.Model):
 
 class User(AbstractUser):
 	likeCount_lesson = models.IntegerField(default=0)
+	id = models.BigIntegerField(primary_key=True,unique=True)
 #	fav_courseID = models.ManyToManyField(Course, related_name='courses')
 	ownerFlg = models.BooleanField(default=False)
 	timestamp = models.DateTimeField(auto_now_add=True)
