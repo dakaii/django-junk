@@ -37,8 +37,8 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
+
     'oauth2_provider',
-    'lessons',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_social_oauth2',
@@ -46,6 +46,7 @@ INSTALLED_APPS = (
     'rest_social_auth',
     'gunicorn',
     'corsheaders',
+    'lessons',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -173,23 +174,24 @@ REST_FRAMEWORK = {
         ),
 }
 
+SOCIAL_AUTH_PIPELINE = (
+    'social_auth.backends.pipeline.social.social_auth_user',
+    'social_auth.backends.pipeline.social.associate_user',
+    'social_auth.backends.pipeline.social.load_extra_data',
+    'social_auth.backends.pipeline.user.update_user_details'
+)
+
 AUTH_USER_MODEL = 'lessons.User'
 
 AUTHENTICATION_BACKENDS = (
         # Facebook OAuth2
-    'social.backends.facebook.FacebookAppOAuth2',
     'social.backends.facebook.FacebookOAuth2',
-    'social.backends.facebook.Facebook2OAuth2',
-    'social.backends.open_id.OpenIdAuth',
-    'social.backends.google.GoogleOpenId',
     'social.backends.google.GoogleOAuth2',
-    'social.backends.google.GoogleOAuth',
     'social.backends.twitter.TwitterOAuth',
-    'social.backends.yahoo.YahooOpenId',
     'rest_framework_social_oauth2.backends.DjangoOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
-
+CORS_ORIGIN_ALLOW_ALL = True
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
 """
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -206,10 +208,14 @@ SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 """
 SOCIAL_AUTH_TWITTER_KEY = 'Your Twitter Key'
 SOCIAL_AUTH_TWITTER_SECRET = 'Your Twitter Secret'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'your secret id'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'your secret key'
+SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS = ['email address']
 """
 # https://github.com/st4lk/django-rest-social-auth
 # https://github.com/PhilipGarnero/django-rest-framework-social-oauth2
 # https://pypi.python.org/pypi/django-socialprofile/0.2.2#facebook
-
+#url = "https://graph.facebook.com/v2.6/me?fields=id%2Cname%2Clocation%2Cbirthday&access_token=EAAJGUqTLHZAkBAHUZBugSoLHNzIO4n72aO4KKr8mQpQInJZCaZCcLnZCIRgPgzKGdxlns9wTsn68ucrpwp9ZAivwB33xZB8Eo2e3mb4ABe8g7DIrkp2liB9VzAVCrShyLt6TNL6iN0K6TXOUsMyr1ebvZBOkIZAczvi6iVL90QOfdFgZDZD"
+#curl -X GET "https://graph.facebook.com/v2.6/me?fields=id%2Cname%2Clocation%2Cbirthday&access_token=CAAJGUqTLHZAkBAL7c8an0bOqnoGOlnAQDUVZB4GvZBTTE0rR9kNL7CVZAOhWxPuXZA2JmVKP7btrJ3PZBnZAC1geCmEY6s4gH0pYfn1w94roAZCYazsxYC2QRFV61iFiXwUeDhZCDIVEbl1WD5w4QcLZAPYuIgDFZAtqqqauKRlLU3GNIO8wx9QvylZB7OH37vdwpzncle9ZBLGjnhwZDZD"
 
 

@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 
 
+class Area(models.Model):
+	area= models.CharField(max_length=100)
 
 class User(AbstractUser):
 	likeCount_lesson = models.IntegerField(default=0)
@@ -29,6 +31,7 @@ class SchoolOwner(models.Model):
 class School(models.Model):
 	school_name = models.CharField(max_length=100)
 	school_owner = models.ForeignKey(SchoolOwner, related_name ="school")
+	area = models.ForeignKey(Area, related_name = "school_place")
 
 	def __str__(self):
 		return '%d: %s' %(self.id, self.school_name)
@@ -59,16 +62,9 @@ class Tutor(models.Model):
 	def __str__(self):
 		return 'id: %s, first_name: %s, last_name: %s' %(self.id, self.first_name, self.last_name)
 
-class Area(models.Model):
-	areaID = models.CharField(max_length=100)
-	area_name = models.CharField(max_length=100)
-	parent_areaID = models.IntegerField()
-	parent_area_name = models.CharField(max_length=100)
-
 class Booking(models.Model):
 	user = models.ForeignKey(User, related_name = "booking_user")
 	lesson = models.ForeignKey(Lesson, related_name = "booking_lesson")
-	area = models.ForeignKey(Area, related_name='booking_place')
 
 
 
