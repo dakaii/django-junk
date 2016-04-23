@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, UserDetail,SchoolOwner, School, Lesson, Tutor, Booking
+from .models import User, UserDetail,SchoolOwner, School, Lesson, Tutor, Booking, Password
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
@@ -45,9 +45,25 @@ class BookingSerializer(serializers.ModelSerializer):
 		model = Booking
 		fields = ('id',)
 
+class PasswordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Password
+        fields = ('password', 'facebook_id')
+        #write_only_fields = ('password','facebook_id')
+
 class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ('username', 'password')
         write_only_fields = ('password',)
+"""
+class SocialSignUpSerializer(serializers.ModelSerializer):
+	username = serializers.CharField(read_only=True)
+	email = serializers.EmailField(read_only=True)
+	class Meta:
+		model = User
+		fields = ('username', 'email')
+        #fields = ('id', 'password')
+        #write_only_fields = ('password',)
+        """
         

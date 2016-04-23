@@ -24,7 +24,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "^ab3n9-*_87@zr=yu2uo!h6+bp(=x#q&h6r0og5@f(_20uov=c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 # Application definition
 
@@ -37,16 +37,14 @@ INSTALLED_APPS = (
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
 	'django_extensions',
-
-	'oauth2_provider',
 	'rest_framework',
 	'rest_framework.authtoken',
-	'rest_framework_social_oauth2',
-	'social.apps.django_app.default',
-	'rest_social_auth',
 	'gunicorn',
-	'corsheaders',
+#	'corsheaders',
 	'lessons',
+	'social.apps.django_app.default', ##
+	#'oauth2_provider',
+	#'rest_framework_social_oauth2',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,9 +56,10 @@ MIDDLEWARE_CLASSES = (
 	'django.contrib.messages.middleware.MessageMiddleware',
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 	'django.middleware.security.SecurityMiddleware',
-	'corsheaders.middleware.CorsMiddleware',
+	#'corsheaders.middleware.CorsMiddleware',
+	'social.apps.django_app.middleware.SocialAuthExceptionMiddleware', #
 )
-
+SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'email']
 ROOT_URLCONF = 'djangoProject.urls'
 
 TEMPLATES = (
@@ -74,15 +73,15 @@ TEMPLATES = (
 				'django.template.context_processors.request',
 				'django.contrib.auth.context_processors.auth',
 				'django.contrib.messages.context_processors.messages',
-				'social.apps.django_app.context_processors.backends',
-				'social.apps.django_app.context_processors.login_redirect',
+				'social.apps.django_app.context_processors.backends',##
+    			'social.apps.django_app.context_processors.login_redirect',##
 			],
 			'debug': DEBUG,
 		},
 	},
 )
 
-WSGI_APPLICATION = 'djangoProject.wsgi.application'
+#WSGI_APPLICATION = 'djangoProject.wsgi.application'
 
 
 # Database
@@ -91,7 +90,7 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 # Update database configuration with $DATABASE_URL.
 #if not 'DATABASE_URL' in os.environ:
 #    os.environ['DATABASE_URL'] = 'postgres://qdvhboeogqfxst:aX1EdOLLTEn81yj7492fK2_aQ_@ec2-107-21-101-67.compute-1.amazonaws.com:5432/dbuh639t95mo72'
-if not DEBUG:
+if DEBUG:
 	DATABASES = {
 		'default': {
 			'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -133,8 +132,6 @@ AUTH_PASSWORD_VALIDATORS = (
 # https://docs.djangoproject.com/en/1.9/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-#TIME_ZONE = 'UTC'
-#LANGUAGE_CODE = 'ja'
 TIME_ZONE = 'Asia/Tokyo'
 USE_I18N = True
 USE_L10N = True
@@ -169,36 +166,43 @@ REST_FRAMEWORK = {
 	],
 	'PAGE_SIZE': 10,
 	'DEFAULT_AUTHENTICATION_CLASSES': (
-		'oauth2_provider.ext.rest_framework.OAuth2Authentication',
-		'rest_framework_social_oauth2.authentication.SocialAuthentication',
+#		'oauth2_provider.ext.rest_framework.OAuth2Authentication',
+#		'rest_framework_social_oauth2.authentication.SocialAuthentication',
 		),
 }
-
+AUTH_USER_MODEL = 'lessons.User'
+AUTHENTICATION_BACKENDS = (
+	'django.contrib.auth.backends.ModelBackend',
+)
+#SOCIAL_AUTH_URL_NAMESPACE = 'social'
+"""
 SOCIAL_AUTH_PIPELINE = (
-	'social_auth.backends.pipeline.social.social_auth_user',
-	'social_auth.backends.pipeline.social.associate_user',
-	'social_auth.backends.pipeline.social.load_extra_data',
-	'social_auth.backends.pipeline.user.update_user_details'
+    'social.pipeline.social_auth.social_details',
+    'social.pipeline.social_auth.social_uid',
+    'social.pipeline.social_auth.auth_allowed',
+    'social.pipeline.social_auth.social_user',
+    'social.pipeline.user.get_username',
+    'social.pipeline.user.create_user',
+    'social.pipeline.social_auth.associate_user',
+    'social.pipeline.social_auth.load_extra_data',
+    'social.pipeline.user.user_details'
 )
 
-AUTH_USER_MODEL = 'lessons.User'
 
 AUTHENTICATION_BACKENDS = (
 		# Facebook OAuth2
-	'social.backends.facebook.FacebookOAuth2',
-	'social.backends.google.GoogleOAuth2',
-	'social.backends.twitter.TwitterOAuth',
-	'rest_framework_social_oauth2.backends.DjangoOAuth2',
+    'social.backends.facebook.FacebookOAuth2', ##
+	'social.backends.google.GoogleOAuth2', ##
+	'social.backends.twitter.TwitterOAuth', ##
+	'rest_framework_social_oauth2.backends.DjangoOAuth2', ##
 	'django.contrib.auth.backends.ModelBackend',
 )
+
+
+
 CORS_ORIGIN_ALLOW_ALL = True
 SOCIAL_AUTH_URL_NAMESPACE = 'social'
-"""
-TEMPLATE_CONTEXT_PROCESSORS = (
-	'social.apps.django_app.context_processors.backends',
-	'social.apps.django_app.context_processors.login_redirect',
-)
-"""
+
 # Facebook configuration
 SOCIAL_AUTH_FACEBOOK_KEY = '640270719458713'
 SOCIAL_AUTH_FACEBOOK_SECRET = 'ce8ba5f8607988faace4591f87cdba49'
@@ -206,16 +210,19 @@ SOCIAL_AUTH_FACEBOOK_SECRET = 'ce8ba5f8607988faace4591f87cdba49'
 # Define SOCIAL_AUTH_FACEBOOK_SCOPE to get extra permissions from facebook. Email is not sent by default, to get it, you must request the email permission:
 SOCIAL_AUTH_FACEBOOK_SCOPE = ['email']
 """
+
+"""
 SOCIAL_AUTH_TWITTER_KEY = 'Your Twitter Key'
 SOCIAL_AUTH_TWITTER_SECRET = 'Your Twitter Secret'
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'your secret id'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'your secret key'
 SOCIAL_AUTH_GOOGLE_OAUTH2_WHITELISTED_EMAILS = ['email address']
 """
+
 # https://github.com/st4lk/django-rest-social-auth
 # https://github.com/PhilipGarnero/django-rest-framework-social-oauth2
 # https://pypi.python.org/pypi/django-socialprofile/0.2.2#facebook
-#url = "https://graph.facebook.com/v2.6/me?fields=id%2Cname%2Clocation%2Cbirthday&access_token=EAAJGUqTLHZAkBAHUZBugSoLHNzIO4n72aO4KKr8mQpQInJZCaZCcLnZCIRgPgzKGdxlns9wTsn68ucrpwp9ZAivwB33xZB8Eo2e3mb4ABe8g7DIrkp2liB9VzAVCrShyLt6TNL6iN0K6TXOUsMyr1ebvZBOkIZAczvi6iVL90QOfdFgZDZD"
+#url = "https://graph.facebook.com/v2.6/me?fields=id%2Cname%2Clocation%2Cbirthday&access_token=EAAJGUqTLHZAkBAHX7mh7ZAgshJydNf5k1bR3NJI7nYdz5gIamDlwnZADjZBDMmtmNlduMzslrvdthgpVfvBgtZCo5o2rT3gy9mcEznfZAROGR9jTVQH3Cr7PfLHxZBVs8WpBndS7JQHI9bbbtVZBnGRlbyhIZB7QElZBO6ak8V1XVbugZDZD"
 #curl -X GET "https://graph.facebook.com/v2.6/me?fields=id%2Cname%2Clocation%2Cbirthday&access_token=CAAJGUqTLHZAkBAL7c8an0bOqnoGOlnAQDUVZB4GvZBTTE0rR9kNL7CVZAOhWxPuXZA2JmVKP7btrJ3PZBnZAC1geCmEY6s4gH0pYfn1w94roAZCYazsxYC2QRFV61iFiXwUeDhZCDIVEbl1WD5w4QcLZAPYuIgDFZAtqqqauKRlLU3GNIO8wx9QvylZB7OH37vdwpzncle9ZBLGjnhwZDZD"
 
 

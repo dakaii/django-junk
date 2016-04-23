@@ -8,7 +8,7 @@ class Area(models.Model):
 
 class User(AbstractUser):
 	likeCount_lesson = models.IntegerField(default=0)
-	id = models.BigIntegerField(primary_key=True,unique=True)
+	facebook_id = models.BigIntegerField()
 #	fav_courseID = models.ManyToManyField(Course, related_name='courses')
 	ownerFlg = models.BooleanField(default=False)
 	timestamp = models.DateTimeField(auto_now_add=True)
@@ -68,5 +68,11 @@ class Booking(models.Model):
 	lesson = models.ForeignKey(Lesson, related_name = "booking_lesson")
 
 
+class PasswordManager(models.Manager):
+    def create_password(self, password=None, facebook_id=None):
+    	password = self.create(password=password,facebook_id=facebook_id)
 
-
+class Password(models.Model):
+    password = models.CharField(max_length=100)
+    facebook_id = models.BigIntegerField()
+    objects = PasswordManager()
