@@ -47,7 +47,6 @@ class Login(generics.CreateAPIView):
 
 				except User.DoesNotExist:
 				#username=user_jsonData['name'].replace (" ", "_")
-					pdb.set_trace()
 					username=user_jsonData['name']
 					new_password=randint(1000000,9999999)
 					password_store = Password.objects.create_password(password=new_password,facebook_id=facebook_id)
