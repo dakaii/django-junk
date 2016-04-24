@@ -90,7 +90,7 @@ TEMPLATES = (
 # Update database configuration with $DATABASE_URL.
 #if not 'DATABASE_URL' in os.environ:
 #    os.environ['DATABASE_URL'] = 'postgres://qdvhboeogqfxst:aX1EdOLLTEn81yj7492fK2_aQ_@ec2-107-21-101-67.compute-1.amazonaws.com:5432/dbuh639t95mo72'
-if DEBUG:
+if not DEBUG:
 	DATABASES = {
 		'default': {
 			'ENGINE': 'django.db.backends.postgresql_psycopg2',
