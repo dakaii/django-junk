@@ -1,5 +1,7 @@
+defusedxml==0.4.1
 dj-database-url==0.4.0
 Django==1.9.5
+django-braces==1.8.1
 django-cors-headers==1.1.0
 django-extensions==1.6.1
 django-oauth-toolkit==0.10.0
@@ -7,9 +9,17 @@ django-registration==2.0.4
 django-rest-framework-social-oauth2==1.0.4
 djangorestframework==3.3.2
 djangorestframework-oauth==1.1.0
+geopy==1.11.0
 gunicorn==19.4.5
 httpie==0.9.3
-python-social-auth==0.2.14
-rest-social-auth==0.4.3
+oauthlib==1.0.3
 psycopg2==2.6.1
+Pygments==2.1.3
+PyJWT==1.4.0
+python-social-auth==0.2.18
+python3-openid==3.0.10
+requests==2.9.1
+requests-oauthlib==0.6.1
+rest-social-auth==0.4.3
+six==1.10.0
 whitenoise==3.0

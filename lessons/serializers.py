@@ -1,49 +1,69 @@
 from rest_framework import serializers
-from .models import User, UserDetail,SchoolOwner, School, Lesson, Tutor, Booking, Password
+from .models import User, UserDetail, Tutor, Plan, Password
+from .models import Location, Event, Shop, Tag, Tutor
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
 
+class LocationSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Location
+		fields = ('place_id','address','latitude','longitude')
+
+
 class UserSerializer(serializers.ModelSerializer):
+	location = serializers.StringRelatedField(many=True)
 	class Meta:
 	    model = User
-	    fields = ('id', 'username','password','first_name','last_name','email','likeCount_lesson')
+	    fields = ('id', 'username','password','first_name','last_name','email','address','latitude','longitude')
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
 	user = serializers.StringRelatedField(many=True)
+	location = serializers.StringRelatedField(many=True)
 	class Meta:
 	    model = UserDetail
-	    fields = ('user','address')
+	    fields = ('id','user','phoneNumber','location')
 
 
-class SchoolOwnerSerializer(serializers.ModelSerializer):
-	school = serializers.StringRelatedField(many=True)
+class TutorSerializer(serializers.ModelSerializer):
+	shop = serializers.StringRelatedField(many=True)
 	class Meta:
-		model = SchoolOwner
-		fields = ('id', 'username','password','email','school')
+		model = Tutor
+		fields = ('id','first_name','last_name','email','shop')
 
 
-class SchoolSerializer(serializers.ModelSerializer):
-	lesson = serializers.StringRelatedField(many=True)
+class ShopSerializer(serializers.ModelSerializer):
+	shop_owner = serializers.StringRelatedField(many=True)
+	shop_location = serializers.StringRelatedField(many=True)
+	tutor = TutorSerializer(read_only=True, many=True)
 	class Meta:
-		model = School
-		fields = ('id', 'school_owner','school_name','lesson')
+		model = Shop
+		fields = ('id','shop_owner','shop_location','tutor')
 
 
-class LessonSerializer(serializers.ModelSerializer):
-	tutor = serializers.StringRelatedField(many=True)
+class EventSerializer(serializers.ModelSerializer):
+	shop = serializers.StringRelatedField(many=True)
+	location = serializers.StringRelatedField(many=True)
 	class Meta:
-		model = Lesson
-		fields = ('id','lesson_name','tutor','description','lesson_detail','timestamp')
+		model = Event
+		fields = ('id','title','date','day_of_week','start_time','end_time','time_type','registered_by','registered_at','updated_by','updated_at','shop','location')
 
-class BookingSerializer(serializers.ModelSerializer):
+
+class TagSerializer(serializers.ModelSerializer):
+	event = serializers.StringRelatedField(many=True)
+	class Meta:
+		model = Tag
+		fields = ('id','tag','event')
+
+
+class PlanSerializer(serializers.ModelSerializer):
 	user = serializers.StringRelatedField(many=True)
-	lesson = serializers.StringRelatedField(many=True)
-
+	#event = serializers.StringRelatedField(many=True)
 	class Meta:
-		model = Booking
-		fields = ('id',)
+		model = Plan
+		fields = ('id','user')
+
 
 class PasswordSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,6 +71,7 @@ class PasswordSerializer(serializers.ModelSerializer):
         fields = ('password', 'facebook_id')
         #write_only_fields = ('password','facebook_id')
 
+##-----------------
 class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

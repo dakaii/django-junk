@@ -7,12 +7,14 @@ from django.forms.models import model_to_dict
 from random import randint
 from django.conf import settings
 from django.contrib.sessions.models import Session
+from django.http import JsonResponse
 
 from rest_framework import status
 
 from lessons.models import User, Password
 from lessons.serializers import SignUpSerializer, PasswordSerializer
 from rest_framework import generics, renderers, viewsets
+from geopy.geocoders import Nominatim
 
 from rest_framework.response import Response
 from django.contrib.auth.decorators import login_required
@@ -46,7 +48,6 @@ class Login(generics.CreateAPIView):
 					user=User.objects.get(facebook_id=facebook_id)
 
 				except User.DoesNotExist:
-				#username=user_jsonData['name'].replace (" ", "_")
 					username=user_jsonData['name']
 					new_password=randint(1000000,9999999)
 					password_store = Password.objects.create_password(password=new_password,facebook_id=facebook_id)
@@ -54,11 +55,11 @@ class Login(generics.CreateAPIView):
 				password = Password.objects.get(facebook_id=facebook_id)
 				password=model_to_dict(password)
 				user=model_to_dict(user)
-				user = authenticate(username=user['username'], password=password['password'])
-				if user is not None:
-					if user.is_active:
-						login(request,user)
-						return Response("Successfully logged in.")
+				user_auth = authenticate(username=user['username'], password=password['password'])
+				if user_auth is not None:
+					if user_auth.is_active:
+						login(request,user_auth)
+						return JsonResponse({'id':user['id'],})
 					else:
 						return Response({"errors": "Error with social authentication1"},
 								status=status.HTTP_400_BAD_REQUEST)

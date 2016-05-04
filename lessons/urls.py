@@ -3,8 +3,8 @@ from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.contrib.auth import views as auth_views
 from lessons import views
-from .views import LessonViewSet, UserViewSet, UserDetailViewSet, BookingViewSet
-from .views import SchoolViewSet, SchoolOwnerViewSet
+from .views import UserViewSet, UserDetailViewSet, LocationViewSet, ShopViewSet
+from .views import EventViewSet, TagViewSet, PlanViewSet, TutorViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework import renderers
 from .authentication import Login, Logout
@@ -13,12 +13,14 @@ from .authentication import Login, Logout
 admin.autodiscover()
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
-router.register(r'lessons', LessonViewSet)
+router.register(r'location', LocationViewSet)
 router.register(r'users', UserViewSet)
 router.register(r'user_detail', UserDetailViewSet)
-router.register(r'schools', SchoolViewSet)
-router.register(r'school_owners', SchoolOwnerViewSet)
-router.register(r'bookings', BookingViewSet)
+router.register(r'shop', ShopViewSet)
+router.register(r'event', EventViewSet)
+router.register(r'tag', TagViewSet)
+router.register(r'plan', PlanViewSet)
+
 
 
 # The API URLs are now determined automatically by the router.
@@ -44,5 +46,6 @@ urlpatterns = [
 	url(r'^logout/$', Logout.as_view()),
 #	url(r'^social_sign_up/$', SocialSignUp.as_view(), name="social_sign_up"),
 #	url(r'^', 'social.apps.django_app.urls', name="social"),
+#	url(r'^user_detail/(?P<pk>\d+)/$', views.UserDetailRetrieve.as_view(), name="user_detail"),
 
 ]

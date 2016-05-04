@@ -24,7 +24,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "^ab3n9-*_87@zr=yu2uo!h6+bp(=x#q&h6r0og5@f(_20uov=c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -42,6 +42,7 @@ INSTALLED_APPS = (
 	'gunicorn',
 #	'corsheaders',
 	'lessons',
+	'geopy',
 	'social.apps.django_app.default', ##
 	#'oauth2_provider',
 	#'rest_framework_social_oauth2',
