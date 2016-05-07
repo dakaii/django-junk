@@ -8,7 +8,7 @@ from rest_framework.parsers import JSONParser
 class LocationSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Location
-		fields = ('place_id','address','latitude','longitude')
+		fields = ('id','location_name')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -20,10 +20,9 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserDetailSerializer(serializers.ModelSerializer):
 	user = serializers.StringRelatedField(many=True)
-	location = serializers.StringRelatedField(many=True)
 	class Meta:
 	    model = UserDetail
-	    fields = ('id','user','phoneNumber','location')
+	    fields = ('id','user','phoneNumber')
 
 
 class TutorSerializer(serializers.ModelSerializer):
@@ -36,7 +35,7 @@ class TutorSerializer(serializers.ModelSerializer):
 class ShopSerializer(serializers.ModelSerializer):
 	shop_owner = serializers.StringRelatedField(many=True)
 	shop_location = serializers.StringRelatedField(many=True)
-	tutor = TutorSerializer(read_only=True, many=True)
+	tutor = TutorSerializer(read_only=True, many=True, required=False)
 	class Meta:
 		model = Shop
 		fields = ('id','shop_owner','shop_location','tutor')
@@ -68,14 +67,14 @@ class PlanSerializer(serializers.ModelSerializer):
 class PasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Password
-        fields = ('password', 'facebook_id')
-        #write_only_fields = ('password','facebook_id')
+        fields = ('email', 'password')
+        write_only_fields = ('password',)
 
 ##-----------------
 class SignUpSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'password')
+        fields = ('email', 'password')
         write_only_fields = ('password',)
 """
 class SocialSignUpSerializer(serializers.ModelSerializer):

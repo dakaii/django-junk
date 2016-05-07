@@ -8,6 +8,8 @@ from .views import EventViewSet, TagViewSet, PlanViewSet, TutorViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework import renderers
 from .authentication import Login, Logout
+from rest_framework.authtoken import views
+from .views import CustomObtainAuthToken
 #from .authentication import SocialSignUp
 
 admin.autodiscover()
@@ -44,6 +46,8 @@ urlpatterns = [
 #	url(r'^auth/', include('django.contrib.auth.urls', namespace='auth')),
 	url(r'^authentication/$', Login.as_view()),
 	url(r'^logout/$', Logout.as_view()),
+#	url(r'^api-token-auth/', views.obtain_auth_token),
+	url(r'^token_auth/', CustomObtainAuthToken.as_view()),
 #	url(r'^social_sign_up/$', SocialSignUp.as_view(), name="social_sign_up"),
 #	url(r'^', 'social.apps.django_app.urls', name="social"),
 #	url(r'^user_detail/(?P<pk>\d+)/$', views.UserDetailRetrieve.as_view(), name="user_detail"),

@@ -5,10 +5,22 @@ SOCIAL_AUTH_FACEBOOK_SECRET = 'ce8ba5f8607988faace4591f87cdba49'
 
 curl -i -X GET "https://graph.facebook.com/oauth/access_token?client_id=640270719458713&client_secret=ce8ba5f8607988faace4591f87cdba49&grant_type=client_credentials"
 
-curl -i -X POST "http://127.0.0.1:8000/authentication/?access_token=EAACEdEose0cBAPCHN8SxkZB69tVb0jS6wATF6dYT3LCfPN69HiNf1vW9UcZAZAcDWV0DebtX5Lepci1yWvyOZBHBETaLTlMOcD9ZC1K9jPnOZA7HOIXhUCaUaZCccusiOx9bPG5YmBZAhG5WnxC3NyvZCD8MA5GFIH0V4dotktCP2JAZDZD"
 
-http -f POST http://127.0.0.1:8000/authentication/ access_token=EAACEdEose0cBAGtlUXiTvZAzZBwAWXcEPQprEECe4qx2sm8e84LgGvpga8wyP9E4Du3E2QZBqBa4ZAEFPP538Pj0nvCLWBOTGzIWTJhZCHEDYklpjvbW0aZAtqG6Tbq4ZAkNijDEK2GdmeZAcwBJQB6RE6rj5orQ9MCuKafwPiCU9QZDZD
 
-http -f POST http://127.0.0.1:8000/social_sign_up/ access_token=EAACEdEose0cBAKk9caWjCtlpWr117ZAOGC0RKwy30JmoG3Q5mzVmPZBMwtBuYH1pDQ0H38vZB4dRQU1IulSbGWYDkTr88ZBgT6pdjlbyfEkGwYKaghIbpejLMEAshMnF7bVhCKEziCfKqUZArRwHZBRuf1ZC0T4TXdaXVROZABdlywZDZD provider=facebook
+http -f POST http://127.0.0.1:8000/authentication/ access_token=EAACEdEose0cBAMl6QCiLDtKkdDCtVKtXBXiBv4FI2ZCDvtJslgMf7vhwEvUDZBPagpePZCVve0kIRRqyTmMLWjsnyKxZC4BHzcxxN208LQexwIOkKYLUtOLgxlP3bnrZBHRLrZAdzKQIWzZBALso1QKfiHqjTCNyZBZCOUPgENqifXwZDZD
 
-http -f POST http://127.0.0.1:8000/logout/ access_token=EAACEdEose0cBAI5hnJdbueKmaTWVmXHbOAg9AfEau2qm4hwdrdZB63PGOkJGweK2Wg1pZBbJsZBu8vuvzACahZBKGW0nBQjKIKrmhSGZBm9CJGhGGqxrJeuCmZCZBzZA7eViX5xwNJzZCHMk35RHjPvKbNZADgG9eutJBSuZAhmOXW0SgZDZD
+
+http POST 127.0.0.1:8000/token_auth/ username='Daiki Nakashita' password='fAsSrU68Wd'
+
+
+curl -X Delete http://127.0.0.1:8000/logout/ -H 'Authorization: Token 89acfe32be5e9ee04f9bce730e902f4921a55ef6'
+
+
+http -f POST http://127.0.0.1:8000/location/ location_name="San Diego"  'Authorization: Token bde2caaae61a840f792eb096a16f945227e02932'
+
+
+http -f POST http://127.0.0.1:8000/shop/ shop_name=omise registered_by=whoever updated_by=nobody shop_location="San Diego"  'Authorization: Token a14e72dc9414a6aa873ad68594cebc7bdecdb3bb'
+
+
+http -f POST http://127.0.0.1:8000/event/ location_name="San Diego"  'Authorization: Token bde2caaae61a840f792eb096a16f945227e02932'
+

@@ -24,7 +24,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 SECRET_KEY = "^ab3n9-*_87@zr=yu2uo!h6+bp(=x#q&h6r0og5@f(_20uov=c"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # Application definition
 
@@ -32,7 +32,7 @@ INSTALLED_APPS = (
 	'django.contrib.admin',
 	'django.contrib.auth',
 	'django.contrib.contenttypes',
-	'django.contrib.sessions',
+#	'django.contrib.sessions',
 	'django.contrib.sites',
 	'django.contrib.messages',
 	'django.contrib.staticfiles',
@@ -43,11 +43,12 @@ INSTALLED_APPS = (
 #	'corsheaders',
 	'lessons',
 	'geopy',
-	'social.apps.django_app.default', ##
+	#'social.apps.django_app.default', ##
 	#'oauth2_provider',
 	#'rest_framework_social_oauth2',
 )
 
+SESSION_ENGINE = "django.contrib.sessions.backends.cached_db"
 MIDDLEWARE_CLASSES = (
 	'django.contrib.sessions.middleware.SessionMiddleware',
 	'django.middleware.common.CommonMiddleware',
@@ -58,7 +59,7 @@ MIDDLEWARE_CLASSES = (
 	'django.middleware.clickjacking.XFrameOptionsMiddleware',
 	'django.middleware.security.SecurityMiddleware',
 	#'corsheaders.middleware.CorsMiddleware',
-	'social.apps.django_app.middleware.SocialAuthExceptionMiddleware', #
+	#'social.apps.django_app.middleware.SocialAuthExceptionMiddleware', #
 )
 SOCIAL_AUTH_ADMIN_USER_SEARCH_FIELDS = ['username', 'email']
 ROOT_URLCONF = 'djangoProject.urls'
@@ -74,8 +75,8 @@ TEMPLATES = (
 				'django.template.context_processors.request',
 				'django.contrib.auth.context_processors.auth',
 				'django.contrib.messages.context_processors.messages',
-				'social.apps.django_app.context_processors.backends',##
-    			'social.apps.django_app.context_processors.login_redirect',##
+				#'social.apps.django_app.context_processors.backends',##
+    			#'social.apps.django_app.context_processors.login_redirect',##
 			],
 			'debug': DEBUG,
 		},
@@ -162,11 +163,15 @@ REST_FRAMEWORK = {
 	# Use Django's standard `django.contrib.auth` permissions,
 	# or allow read-only access for unauthenticated users.
 	'DEFAULT_PERMISSION_CLASSES': [
-		'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+		#'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+		'rest_framework.permissions.IsAuthenticated',
 	#    'rest_framework.permissions.IsAdminUser',
+		#'rest_framework.permissions.AllowAny',
 	],
 	'PAGE_SIZE': 10,
 	'DEFAULT_AUTHENTICATION_CLASSES': (
+		'rest_framework.authentication.TokenAuthentication',
+#		'rest_framework.authentication.SessionAuthentication'
 #		'oauth2_provider.ext.rest_framework.OAuth2Authentication',
 #		'rest_framework_social_oauth2.authentication.SocialAuthentication',
 		),
@@ -175,6 +180,7 @@ AUTH_USER_MODEL = 'lessons.User'
 AUTHENTICATION_BACKENDS = (
 	'django.contrib.auth.backends.ModelBackend',
 )
+
 #SOCIAL_AUTH_URL_NAMESPACE = 'social'
 """
 SOCIAL_AUTH_PIPELINE = (
