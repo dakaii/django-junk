@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, UserDetail, Tutor, Plan, Password
+from .models import User, Tutor, Plan, Password
 from .models import Location, Event, Shop, Tag, Tutor
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
@@ -12,17 +12,17 @@ class LocationSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-	location = serializers.StringRelatedField(many=True)
+	location = serializers.StringRelatedField()
 	class Meta:
 	    model = User
-	    fields = ('id', 'username','password','first_name','last_name','email','address','latitude','longitude')
+	    fields = ('id', 'username','email','location')
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
-	user = serializers.StringRelatedField(many=True)
+	location = serializers.StringRelatedField()
 	class Meta:
-	    model = UserDetail
-	    fields = ('id','user','phoneNumber')
+	    model = User
+	    fields = ('id','user','first_name','last_name','email','location')
 
 
 class TutorSerializer(serializers.ModelSerializer):
@@ -34,7 +34,7 @@ class TutorSerializer(serializers.ModelSerializer):
 
 class ShopSerializer(serializers.ModelSerializer):
 	shop_owner = serializers.StringRelatedField(many=True)
-	shop_location = serializers.StringRelatedField(many=True)
+	shop_location = serializers.StringRelatedField()
 	tutor = TutorSerializer(read_only=True, many=True, required=False)
 	class Meta:
 		model = Shop
@@ -42,22 +42,22 @@ class ShopSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
-	shop = serializers.StringRelatedField(many=True)
-	location = serializers.StringRelatedField(many=True)
+	shop = serializers.StringRelatedField()
+	location = serializers.StringRelatedField()
 	class Meta:
 		model = Event
 		fields = ('id','title','date','day_of_week','start_time','end_time','time_type','registered_by','registered_at','updated_by','updated_at','shop','location')
 
 
 class TagSerializer(serializers.ModelSerializer):
-	event = serializers.StringRelatedField(many=True)
+	event = serializers.StringRelatedField()
 	class Meta:
 		model = Tag
 		fields = ('id','tag','event')
 
 
 class PlanSerializer(serializers.ModelSerializer):
-	user = serializers.StringRelatedField(many=True)
+	user = serializers.StringRelatedField()
 	#event = serializers.StringRelatedField(many=True)
 	class Meta:
 		model = Plan

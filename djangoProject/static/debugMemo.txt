@@ -5,22 +5,31 @@ SOCIAL_AUTH_FACEBOOK_SECRET = 'ce8ba5f8607988faace4591f87cdba49'
 
 curl -i -X GET "https://graph.facebook.com/oauth/access_token?client_id=640270719458713&client_secret=ce8ba5f8607988faace4591f87cdba49&grant_type=client_credentials"
 
+http POST 127.0.0.1:8000/token_auth/ username='Daiki Nakashita' password='fAsSrU68Wd'
 
 
 http -f POST http://127.0.0.1:8000/authentication/ access_token=EAACEdEose0cBAMl6QCiLDtKkdDCtVKtXBXiBv4FI2ZCDvtJslgMf7vhwEvUDZBPagpePZCVve0kIRRqyTmMLWjsnyKxZC4BHzcxxN208LQexwIOkKYLUtOLgxlP3bnrZBHRLrZAdzKQIWzZBALso1QKfiHqjTCNyZBZCOUPgENqifXwZDZD
 
 
-http POST 127.0.0.1:8000/token_auth/ username='Daiki Nakashita' password='fAsSrU68Wd'
+http -f POST http://127.0.0.1:8000/authentication/ username='chime' password='charin' location=omotesandou email=chime@gmail.com
+
 
 
 curl -X Delete http://127.0.0.1:8000/logout/ -H 'Authorization: Token 89acfe32be5e9ee04f9bce730e902f4921a55ef6'
 
 
-http -f POST http://127.0.0.1:8000/location/ location_name="San Diego"  'Authorization: Token bde2caaae61a840f792eb096a16f945227e02932'
+http -f POST http://127.0.0.1:8000/location/ location="San Diego"  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
 
 
-http -f POST http://127.0.0.1:8000/shop/ shop_name=omise registered_by=whoever updated_by=nobody shop_location="San Diego"  'Authorization: Token a14e72dc9414a6aa873ad68594cebc7bdecdb3bb'
+http -f POST http://127.0.0.1:8000/shop/ shop_name=omise location="San Diego"  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
 
 
-http -f POST http://127.0.0.1:8000/event/ location_name="San Diego"  'Authorization: Token bde2caaae61a840f792eb096a16f945227e02932'
+http -f POST http://127.0.0.1:8000/event/ title=toriaezulocation="San Diego" start_time=12:00pm end_time=22:21 time_type=10  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
+
+http -f POST http://127.0.0.1:8000/event/ title=nikome date=2016-12-12 location="San Diego" start_time=12:00pm end_time=3:21pm time_type=10  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
+
+http -f POST http://127.0.0.1:8000/event/ title=sankome shop_name=omise location="San Diego" start_time=12:00pm end_time=3:21pm time_type=10  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
+
+http -f GET http://127.0.0.1:8000/users/1
+
 
