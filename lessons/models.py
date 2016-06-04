@@ -1,10 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from django.utils import timezone
-from django.contrib.postgres.fields import ArrayField, JSONField
+from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from rest_framework.authtoken.models import Token
 from django.conf import settings
 
 # This code is triggered whenever a new user has been created and saved to the database
@@ -58,6 +56,10 @@ class Location(models.Model):
 	def __str__(self):
 		return '%d: %s'%(self.id, self.location_name)
 
+class TutorManager(models.Manager):
+	def create_tutor(self, first_name=None, last_name=None, email=None):
+		tutor = self.create(first_name=first_name, last_name=last_name, email=email)
+		return tutor
 
 class Tutor(models.Model):
 	first_name = models.CharField(max_length=30)
@@ -89,6 +91,11 @@ class Shop(models.Model):
 	shop_location = models.ForeignKey(Location, related_name = "shop_location")
 	objects = ShopManager()
 
+class CourseManager(models.Manager):
+	def create_course(self, title=None, original_id=None, description=None, registered_by=None, registered_at=None, updated_by=None, updated_at=None):
+		course = self.create(title=title,original_id=original_id,description=description,registered_by=registered_by,registered_at=registered_at,updated_by=updated_by,updated_at=updated_at)
+		return course
+
 class Course(models.Model):
 	title = models.CharField(max_length=200)
 	original_id = models.BigIntegerField(null=True, blank=True)
@@ -117,8 +124,28 @@ class Event(models.Model):
 	location = models.ForeignKey(Location)
 	shop = models.ForeignKey(Shop,null=True,blank=True)
 	course = models.ForeignKey(Course,null=True,blank=True)
-	tutor = models.ManyToManyField(Tutor, related_name="tutor",null=True,blank=True)
+	tutorKey = models.ManyToManyField(Tutor, related_name="tutor",null=True,blank=True)
+	tutorName = models.CharField(max_length=20,null=True,blank=True)
 	objects = EventManager()
+
+
+class TagManager(models.Manager):
+	def create_event(self, tag=None, event=None):
+		event = self.create(tag=tag, event=event)
+		return event
+
+class Tag(models.Model):
+	tag = models.CharField(max_length=200)
+	event = models.ManyToManyField(Event, related_name='event')
+	objects = TagManager()
+
+class ScheduleManager(models.Manager):
+	def create_schedule(self, user=None):
+		schedule = self.create(user=user)
+		return schedule
+
+class Schedule(models.Model):
+	user = models.ForeignKey(User, related_name = "user_booking")
 
 class DataPictureMapping(models.Model):
 	name = models.CharField(max_length=300)
@@ -131,20 +158,5 @@ class DataPictureMapping(models.Model):
 	registered_at = models.DateTimeField(auto_now_add=True)
 	updated_by = models.CharField(max_length=100)
 	updated_at = models.DateTimeField(auto_now_add=True)
-
-class TagManager(models.Manager):
-	def create_event(self, tag=None, event=None):
-		event = self.create(tag=tag, event=event)
-		return event
-
-class Tag(models.Model):
-	tag = models.CharField(max_length=200)
-	event = models.ManyToManyField(Event, related_name='event')
-	objects = TagManager()
-
-
-class Schedule(models.Model):
-	user = models.ForeignKey(User, related_name = "user_booking")
-
 
 
