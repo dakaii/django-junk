@@ -30,6 +30,48 @@ http -f POST http://127.0.0.1:8000/event/ title=nikome date=2016-12-12 location=
 
 http -f POST http://127.0.0.1:8000/event/ title=sankome shop_name=omise location="San Diego" start_time=12:00pm end_time=3:21pm time_type=10  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
 
+
 http -f GET http://127.0.0.1:8000/users/1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+http -f POST https://chimeproject.herokuapp.com/authentication/ username='chime' password='charin' location=omotesandou email=chime@gmail.com
+
+
+
+curl -X Delete https://chimeproject.herokuapp.com/logout/ -H 'Authorization: Token 89acfe32be5e9ee04f9bce730e902f4921a55ef6'
+
+
+http -f POST https://chimeproject.herokuapp.com/location/ location="San Diego"  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
+
+
+http -f POST https://chimeproject.herokuapp.com/shop/ shop_name=omise location="San Diego"  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
+
+
+http -f POST https://chimeproject.herokuapp.com/event/ title=toriaezulocation="San Diego" start_time=12:00pm end_time=22:21 time_type=10  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
+
+http -f POST https://chimeproject.herokuapp.com/event/ title=nikome date=2016-12-12 location="San Diego" start_time=12:00pm end_time=3:21pm time_type=10  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
+
+http -f POST https://chimeproject.herokuapp.com/event/ title=sankome shop_name=omise location="San Diego" start_time=12:00pm end_time=3:21pm time_type=10  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
+
+
+http  GET https://chimeproject.herokuapp.com/users/1
+
 
 

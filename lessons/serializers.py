@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Tutor, Plan, Password
+from .models import User, Tutor, Schedule, Password
 from .models import Location, Event, Shop, Tag, Tutor
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
@@ -56,11 +56,11 @@ class TagSerializer(serializers.ModelSerializer):
 		fields = ('id','tag','event')
 
 
-class PlanSerializer(serializers.ModelSerializer):
+class ScheduleSerializer(serializers.ModelSerializer):
 	user = serializers.StringRelatedField()
 	#event = serializers.StringRelatedField(many=True)
 	class Meta:
-		model = Plan
+		model = Schedule
 		fields = ('id','user')
 
 

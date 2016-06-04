@@ -4,7 +4,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from django.contrib.auth import views as auth_views
 from lessons import views
 from .views import UserViewSet, UserDetailViewSet, LocationViewSet, ShopViewSet
-from .views import EventViewSet, TagViewSet, PlanViewSet, TutorViewSet
+from .views import EventViewSet, TagViewSet, ScheduleViewSet, TutorViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework import renderers
 from .authentication import Login, Logout
@@ -21,7 +21,7 @@ router.register(r'user_detail', UserDetailViewSet)
 router.register(r'shop', ShopViewSet)
 router.register(r'event', EventViewSet)
 router.register(r'tag', TagViewSet)
-router.register(r'plan', PlanViewSet)
+router.register(r'schedule', ScheduleViewSet)
 
 
 
