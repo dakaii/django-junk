@@ -1,4 +1,4 @@
-from .models import Location, User, Tutor, Schedule, Tag, Shop, Event
+from .models import Location, User, Tutor, Schedule, Tag, Shop, Event, Course
 from rest_framework.decorators import api_view, detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -6,7 +6,7 @@ from rest_framework import status
 from django.shortcuts import get_object_or_404
 
 from .serializers import LocationSerializer, UserSerializer,UserDetailSerializer, ShopSerializer
-from .serializers import EventSerializer, TagSerializer, ScheduleSerializer, TutorSerializer
+from .serializers import EventSerializer, TagSerializer, ScheduleSerializer, TutorSerializer, CourseSerializer
 from .permissions import IsOwnerOrReadOnly, IsAuthenticatedOrCreate
 from rest_framework import generics, renderers, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny#, IsAdminOrIsSelf
@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 from geopy.geocoders import Nominatim
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from .location import obtain_location_info, save_location
+from .location import save_location, obtain_location
 
 import pdb
 
@@ -23,27 +23,27 @@ class LocationViewSet(viewsets.ModelViewSet):
 	serializer_class = LocationSerializer
 	permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 	def create(self, request, **kwargs):
-		location=obtain_location_info(request)
-		if location:
-			if save_location(request.user.username,location)['result']:
-				return Response({'successfully saved': location.raw['formatted_address']})
-			else:
-				return Response({"errors": "This data already exists in the database."},
-									status=status.HTTP_400_BAD_REQUEST)
+		if request.POST.get('datastore'):
+			try:
+				location=save_location('chime',location_name=request.POST.get('location_name'), original_id=request.POST.get('original_id'), access=request.POST.get('access'), city=request.POST.get('city'), state=request.POST.get('state'), zipcode=request.POST.get('zipcode'), longitude=request.POST.get('longitude'), latitude=request.POST.get('latitude'), address=request.POST.get('address'), county_code=request.POST.get('county_code'), registered_by=username, updated_by=username)['result']
+				return Response({'successfully saved': request.POST.get('location_name')})
+			except Exception:
+				return Response({"error": "error"},
+										status=status.HTTP_400_BAD_REQUEST)
 		else:
-			return Response({"errors": "probably not enough argumnets provided"},
-									status=status.HTTP_400_BAD_REQUEST)
+			username=request.user.username
+			location = obtain_location(request)
+			if location is not None:
+				save_result = save_location(username,location_name=location.raw['formatted_address'], original_id=None, access=None, city=None, state=None, zipcode=None, longitude=location.raw['geometry']['location']['lng'], latitude=location.raw['geometry']['location']['lat'], address=location.raw['formatted_address'], county_code=None, registered_by=username, updated_by=username)['result']
+				if save_result=='success':
+					return Response({'successfully saved': location.raw['formatted_address']})
+				elif save_result=='duplicate':
+					return Response({"errors": "This data already exists in the database."},
+										status=status.HTTP_400_BAD_REQUEST)
+			else:
+				return Response({"errors": "Connection timeout"},
+					status=status.HTTP_400_BAD_REQUEST)
 
-
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-	queryset = User.objects.all()
-	serializer_class = UserSerializer
-	permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-
-class UserDetailViewSet(viewsets.ModelViewSet):
-	queryset = User.objects.all()
-	serializer_class = UserDetailSerializer
-	permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)  
 
 class ScheduleViewSet(viewsets.ModelViewSet):
 	queryset = Schedule.objects.all()
@@ -59,8 +59,7 @@ class ShopViewSet(viewsets.ModelViewSet):
 		shop_name=request.POST.get('shop_name')
 		shop_owner=request.user
 		try:
-			location=obtain_location_info(request)
-			location=save_location(request.user.username,location)['location']
+			location=save_location(request)['location']
 		except Exception:
 			return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
 		try:
@@ -85,8 +84,7 @@ class EventViewSet(viewsets.ModelViewSet):
 		end_time = request.POST.get('end_time')
 		time_type = request.POST.get('time_type')
 		try:
-			location=obtain_location_info(request)
-			location=save_location(request.user.username,location)['location']
+			location=save_location(request)['location']
 			if request.POST.get('shop_name') is not None:
 				shop=Shop.objects.filter(shop_name=request.POST.get('shop_name'),shop_location=location).order_by('id').first()
 				location=shop.shop_location
@@ -109,11 +107,42 @@ class TagViewSet(viewsets.ModelViewSet):
 	serializer_class = TagSerializer
 	permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
+class CourseViewSet(viewsets.ModelViewSet):
+	queryset = Course.objects.all()
+	serializer_class = CourseSerializer
+	permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+	title=request.POST.get('title')
+	username=request.user.username
+	description = request.POST.get('description')
+	original_id = request.POST.get('original_id')
+	"""
+	try:
+		event=Course.objects.get(title=title)
+		return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+	except Event.DoesNotExist:
+		event = Event.objects.create_event(title=title, date=request.POST.get('date'), day_of_week=request.POST.get('day_of_week'), start_time=start_time, end_time=end_time, time_type=time_type, registered_by=username, updated_by=username, shop=shop, location=location)
+		return Response({'successfully saved': event.title})
+	except Event.MultipleObjectsReturned:
+		shop=Shop.objects.filter(title=title,location=location).order_by('id').first()
+		return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+	"""
+
+
 class TutorViewSet(viewsets.ModelViewSet):
 	queryset = Tutor.objects.all()
 	serializer_class = TutorSerializer
 	permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
+
+class UserViewSet(viewsets.ReadOnlyModelViewSet):
+	queryset = User.objects.all()
+	serializer_class = UserSerializer
+	permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+
+class UserDetailViewSet(viewsets.ModelViewSet):
+	queryset = User.objects.all()
+	serializer_class = UserDetailSerializer
+	permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)  
 
 
 class CustomObtainAuthToken(ObtainAuthToken):

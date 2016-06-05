@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import User, Tutor, Schedule, Password
-from .models import Location, Event, Shop, Tag, Tutor
+from .models import Location, Event, Shop, Tag, Tutor, Course
 from rest_framework.renderers import JSONRenderer
 from rest_framework.parsers import JSONParser
 
@@ -9,21 +9,6 @@ class LocationSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Location
 		fields = ('id','location_name')
-
-
-class UserSerializer(serializers.ModelSerializer):
-	location = serializers.StringRelatedField()
-	class Meta:
-	    model = User
-	    fields = ('id', 'username','email','location')
-
-
-class UserDetailSerializer(serializers.ModelSerializer):
-	location = serializers.StringRelatedField()
-	class Meta:
-	    model = User
-	    fields = ('id','user','first_name','last_name','email','location')
-
 
 class TutorSerializer(serializers.ModelSerializer):
 	shop = serializers.StringRelatedField(many=True)
@@ -63,12 +48,24 @@ class ScheduleSerializer(serializers.ModelSerializer):
 		model = Schedule
 		fields = ('id','user')
 
-
-class PasswordSerializer(serializers.ModelSerializer):
+class CourseSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Password
-        fields = ('email', 'password')
-        write_only_fields = ('password',)
+        model = Course
+        fields = ('id','title')
+
+class UserSerializer(serializers.ModelSerializer):
+    location = serializers.StringRelatedField()
+    class Meta:
+        model = User
+        fields = ('id', 'username','email','location')
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    location = serializers.StringRelatedField()
+    class Meta:
+        model = User
+        fields = ('id','user','first_name','last_name','email','location')
+
 
 ##-----------------
 class SignUpSerializer(serializers.ModelSerializer):
@@ -76,14 +73,3 @@ class SignUpSerializer(serializers.ModelSerializer):
         model = User
         fields = ('email', 'password')
         write_only_fields = ('password',)
-"""
-class SocialSignUpSerializer(serializers.ModelSerializer):
-	username = serializers.CharField(read_only=True)
-	email = serializers.EmailField(read_only=True)
-	class Meta:
-		model = User
-		fields = ('username', 'email')
-        #fields = ('id', 'password')
-        #write_only_fields = ('password',)
-        """
-        

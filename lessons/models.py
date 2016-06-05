@@ -12,16 +12,6 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
 		Token.objects.create(user=instance)
 		
 
-class User(AbstractUser):
-	facebook_id = models.BigIntegerField(null=True)
-	ownerFlg = models.BooleanField(default=False)
-	registered_at = models.DateTimeField(auto_now_add=True)
-	location = models.OneToOneField(Location, null=True)
-	phoneNumber = models.IntegerField(null=True)
-	chime_plan = models.CharField(max_length=50,null=True)
-	def __str__(self):
-		return '%d: %s'%(self.id, self.username)
-
 
 class PasswordManager(models.Manager):
 	def create_password(self, password=None, email=None):
@@ -37,17 +27,22 @@ class Password(models.Model):
 
 
 class LocationManager(models.Manager):
-	def create_location(self, location_name=None, longitude=None, latitude=None, address=None, registered_by=None, updated_by=None,bounds=None):
-		location = self.create(location_name=location_name, longitude=longitude, latitude=latitude, address=address, registered_by=registered_by, updated_by=updated_by,bounds=bounds)
+	def create_location(self, location_name=None, original_id=None, access=None, city=None, state=None, zipcode=None, longitude=None, latitude=None, address=None, county_code=None, registered_by=None, updated_by=None):
+		location = self.create(location_name=location_name, original_id=original_id, access=access, city=city, state=state, zipcode=zipcode, longitude=longitude, latitude=latitude, address=address, county_code=county_code, registered_by=registered_by, updated_by=updated_by)
 		return location
 
 
 class Location(models.Model):
 	location_name = models.CharField(max_length=100,null=True)
+	original_id = models.BigIntegerField(null=True,blank=True)
+	access = models.CharField(max_length=300, null=True,blank=True)
+	city = models.CharField(max_length=50,null=True,blank=True)
+	state = models.IntegerField(null=True,blank=True)
+	zipcode = models.CharField(max_length=50,null=True,blank=True)
 	longitude = models.FloatField(null=True)
 	latitude = models.FloatField(null=True)
-	address = models.CharField(max_length=300,null=True)
-	county_code = models.IntegerField(null=True)
+	address = models.CharField(max_length=300)
+	county_code = models.IntegerField(null=True,blank=True)
 	registered_by = models.CharField(max_length=100)
 	registered_at = models.DateTimeField(auto_now_add=True)
 	updated_by = models.CharField(max_length=100)
@@ -55,6 +50,17 @@ class Location(models.Model):
 	objects = LocationManager()
 	def __str__(self):
 		return '%d: %s'%(self.id, self.location_name)
+
+class User(AbstractUser):
+	facebook_id = models.BigIntegerField(null=True)
+	ownerFlg = models.BooleanField(default=False)
+	registered_at = models.DateTimeField(auto_now_add=True)
+	location = models.OneToOneField(Location, null=True)
+	phoneNumber = models.IntegerField(null=True)
+	chime_plan = models.CharField(max_length=50,null=True)
+	def __str__(self):
+		return '%d: %s'%(self.id, self.username)
+
 
 class TutorManager(models.Manager):
 	def create_tutor(self, first_name=None, last_name=None, email=None):
@@ -124,7 +130,7 @@ class Event(models.Model):
 	location = models.ForeignKey(Location)
 	shop = models.ForeignKey(Shop,null=True,blank=True)
 	course = models.ForeignKey(Course,null=True,blank=True)
-	tutorKey = models.ManyToManyField(Tutor, related_name="tutor",null=True,blank=True)
+	tutorKey = models.ManyToManyField(Tutor, related_name="tutor",blank=True)
 	tutorName = models.CharField(max_length=20,null=True,blank=True)
 	objects = EventManager()
 
