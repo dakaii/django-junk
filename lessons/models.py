@@ -1,168 +1,181 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 
+
 # This code is triggered whenever a new user has been created and saved to the database
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
-	if created:
-		Token.objects.create(user=instance)
-		
+    if created:
+        Token.objects.create(user=instance)
 
 
 class PasswordManager(models.Manager):
-	def create_password(self, password=None, email=None):
-		password = self.create(password=password,email=email)
-		return password
+    def create_password(self, password=None, email=None):
+        password = self.create(password=password,email=email)
+        return password
 
 
 class Password(models.Model):
-	password = models.CharField(max_length=100)
-	email = models.EmailField()
-	objects = PasswordManager()
-
+    password = models.CharField(max_length=100)
+    email = models.EmailField()
+    objects = PasswordManager()
 
 
 class LocationManager(models.Manager):
-	def create_location(self, location_name=None, original_id=None, access=None, city=None, state=None, zipcode=None, longitude=None, latitude=None, address=None, county_code=None, registered_by=None, updated_by=None):
-		location = self.create(location_name=location_name, original_id=original_id, access=access, city=city, state=state, zipcode=zipcode, longitude=longitude, latitude=latitude, address=address, county_code=county_code, registered_by=registered_by, updated_by=updated_by)
-		return location
+    def create_location(self, location_name=None, original_id=None, access=None, city=None, state=None, zipcode=None, longitude=None, latitude=None, address=None, county_code=None, registered_by=None, updated_by=None):
+        location = self.create(location_name=location_name, original_id=original_id, access=access, city=city, state=state, zipcode=zipcode, longitude=longitude, latitude=latitude, address=address, county_code=county_code, registered_by=registered_by, updated_by=updated_by)
+        return location
 
 
 class Location(models.Model):
-	location_name = models.CharField(max_length=100,null=True)
-	original_id = models.BigIntegerField(null=True,blank=True)
-	access = models.CharField(max_length=300, null=True,blank=True)
-	city = models.CharField(max_length=50,null=True,blank=True)
-	state = models.IntegerField(null=True,blank=True)
-	zipcode = models.CharField(max_length=50,null=True,blank=True)
-	longitude = models.FloatField(null=True)
-	latitude = models.FloatField(null=True)
-	address = models.CharField(max_length=300)
-	county_code = models.IntegerField(null=True,blank=True)
-	registered_by = models.CharField(max_length=100)
-	registered_at = models.DateTimeField(auto_now_add=True)
-	updated_by = models.CharField(max_length=100)
-	updated_at = models.DateTimeField(auto_now_add=True)
-	objects = LocationManager()
-	def __str__(self):
-		return '%d: %s'%(self.id, self.location_name)
+    location_name = models.CharField(max_length=100,null=True)
+    original_id = models.CharField(max_length=100, null=True, blank=True)
+    access = models.CharField(max_length=300, null=True,blank=True)
+    city = models.CharField(max_length=50,null=True,blank=True)
+    state = models.IntegerField(null=True,blank=True)
+    zipcode = models.CharField(max_length=50,null=True,blank=True)
+    longitude = models.FloatField(null=True)
+    latitude = models.FloatField(null=True)
+    address = models.CharField(max_length=300)
+    county_code = models.IntegerField(null=True,blank=True)
+    registered_by = models.CharField(max_length=100)
+    registered_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.CharField(max_length=100)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    objects = LocationManager()
+
+    def __str__(self):
+        return '%d: %s'%(self.id, self.location_name)
+
 
 class User(AbstractUser):
-	facebook_id = models.BigIntegerField(null=True)
-	ownerFlg = models.BooleanField(default=False)
-	registered_at = models.DateTimeField(auto_now_add=True)
-	location = models.OneToOneField(Location, null=True)
-	phoneNumber = models.IntegerField(null=True)
-	chime_plan = models.CharField(max_length=50,null=True)
-	def __str__(self):
-		return '%d: %s'%(self.id, self.username)
+    facebook_id = models.BigIntegerField(null=True)
+    ownerFlg = models.BooleanField(default=False)
+    registered_at = models.DateTimeField(auto_now_add=True)
+    location = models.OneToOneField(Location, null=True)
+    phoneNumber = models.IntegerField(null=True)
+    chime_plan = models.CharField(max_length=50, null=True)
+
+    def __str__(self):
+        return '%d: %s'%(self.id, self.username)
 
 
 class TutorManager(models.Manager):
-	def create_tutor(self, first_name=None, last_name=None, email=None):
-		tutor = self.create(first_name=first_name, last_name=last_name, email=email)
-		return tutor
+    def create_tutor(self, first_name=None, last_name=None, email=None):
+        tutor = self.create(first_name=first_name, last_name=last_name, email=email)
+        return tutor
+
 
 class Tutor(models.Model):
-	first_name = models.CharField(max_length=30)
-	last_name = models.CharField(max_length=30)
-	email = models.EmailField()
-	def __str__(self):
-		return 'id: %s, first_name: %s, last_name: %s' %(self.id, self.first_name, self.last_name)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    email = models.EmailField()
+
+    def __str__(self):
+        return 'id: %s, first_name: %s, last_name: %s' %(self.id, self.first_name, self.last_name)
 
 
 class ShopManager(models.Manager):
-	def create_shop(self, shop_name=None, user_editable=None, registered_by=None, updated_by=None, shop_owner=None, shop_location=None):
-		shop = self.create(shop_name=shop_name, user_editable=user_editable, registered_by=registered_by, updated_by=updated_by, shop_owner=shop_owner, shop_location=shop_location)
-		return shop
+    def create_shop(self, shop_name=None, user_editable=None, registered_by=None, updated_by=None, shop_owner=None, shop_location=None):
+        shop = self.create(shop_name=shop_name, user_editable=user_editable, registered_by=registered_by, updated_by=updated_by, shop_owner=shop_owner, shop_location=shop_location)
+        return shop
 
 
 class Shop(models.Model):
-	shop_name = models.CharField(max_length=200)
-	user_editable = models.BooleanField(default=False)
-	original_id = models.BigIntegerField(null=True, blank=True)
-	floor = models.CharField(max_length=25,null=True,blank=True)
-	referUrl = models.URLField(null=True,blank=True)
-	remarks = models.CharField(max_length=25,null=True,blank=True)
-	tel = models.CharField(max_length=12)
-	registered_by = models.CharField(max_length=100)
-	updated_by = models.CharField(max_length=100)
-	registered_at = models.DateTimeField(auto_now_add=True)
-	updated_at = models.DateTimeField(auto_now_add=True)
-	shop_owner = models.ForeignKey(User, related_name = "shop_owner")
-	shop_location = models.ForeignKey(Location, related_name = "shop_location")
-	objects = ShopManager()
+    shop_name = models.CharField(max_length=200)
+    user_editable = models.BooleanField(default=False)
+    original_id = models.BigIntegerField(null=True, blank=True)
+    floor = models.CharField(max_length=25, null=True, blank=True)
+    referUrl = models.URLField(null=True, blank=True)
+    remarks = models.CharField(max_length=25, null=True, blank=True)
+    tel = models.CharField(max_length=12)
+    registered_by = models.CharField(max_length=100)
+    updated_by = models.CharField(max_length=100)
+    registered_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    shop_owner = models.ForeignKey(User, related_name="shop_owner")
+    shop_location = models.ForeignKey(Location, related_name="shop_location")
+    objects = ShopManager()
+
 
 class CourseManager(models.Manager):
-	def create_course(self, title=None, original_id=None, description=None, registered_by=None, registered_at=None, updated_by=None, updated_at=None):
-		course = self.create(title=title,original_id=original_id,description=description,registered_by=registered_by,registered_at=registered_at,updated_by=updated_by,updated_at=updated_at)
-		return course
+    def create_course(self, title=None, original_id=None, description=None, registered_by=None, registered_at=None, updated_by=None, updated_at=None):
+        course = self.create(title=title,original_id=original_id,description=description,registered_by=registered_by,registered_at=registered_at,updated_by=updated_by,updated_at=updated_at)
+        return course
+
 
 class Course(models.Model):
-	title = models.CharField(max_length=200)
-	original_id = models.BigIntegerField(null=True, blank=True)
-	description = models.CharField(max_length = 500)
-	registered_by = models.CharField(max_length=100)
-	registered_at = models.DateTimeField(auto_now_add=True)
-	updated_by = models.CharField(max_length=100)
-	updated_at = models.DateTimeField(auto_now_add=True)
+    title = models.CharField(max_length=200)
+    original_id = models.BigIntegerField(null=True, blank=True)
+    description = models.CharField(max_length = 500)
+    registered_by = models.CharField(max_length=100)
+    registered_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.CharField(max_length=100)
+    updated_at = models.DateTimeField(auto_now_add=True)
+
 
 class EventManager(models.Manager):
-	def create_event(self, title=None, date=None, day_of_week=None, start_time=None, end_time=None, time_type=None, registered_by=None, updated_by=None, shop=None, location=None):
-		event = self.create(title=title, date=date, day_of_week=day_of_week, start_time=start_time, end_time=end_time, time_type=time_type, registered_by=registered_by, updated_by=updated_by, shop=shop, location=location)
-		return event
+    def create_event(self, title=None, date=None, day_of_week=None, start_time=None, end_time=None, time_type=None, registered_by=None, updated_by=None, shop=None, location=None):
+        event = self.create(title=title, date=date, day_of_week=day_of_week, start_time=start_time, end_time=end_time, time_type=time_type, registered_by=registered_by, updated_by=updated_by, shop=shop, location=location)
+        return event
+
 
 class Event(models.Model):
-	title = models.CharField(max_length=100)
-	date = models.DateField(null=True, blank=True)
-	day_of_week = models.IntegerField(null=True,blank=True)
-	start_time = models.TimeField(null=True, blank=True)
-	end_time = models.TimeField(null=True, blank=True)
-	time_type = models.IntegerField()
-	registered_by = models.CharField(max_length=100)
-	registered_at = models.DateTimeField(auto_now_add=True)
-	updated_by = models.CharField(max_length=100)
-	updated_at = models.DateTimeField(auto_now_add=True)
-	location = models.ForeignKey(Location)
-	shop = models.ForeignKey(Shop,null=True,blank=True)
-	course = models.ForeignKey(Course,null=True,blank=True)
-	tutorKey = models.ManyToManyField(Tutor, related_name="tutor",blank=True)
-	tutorName = models.CharField(max_length=20,null=True,blank=True)
-	objects = EventManager()
+    title = models.CharField(max_length=100)
+    date = models.DateField(null=True, blank=True)
+    day_of_week = models.IntegerField(null=True,blank=True)
+    start_time = models.TimeField(null=True, blank=True)
+    end_time = models.TimeField(null=True, blank=True)
+    time_type = models.IntegerField()
+    registered_by = models.CharField(max_length=100)
+    registered_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.CharField(max_length=100)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    location = models.ForeignKey(Location)
+    shop = models.ForeignKey(Shop,null=True,blank=True)
+    course = models.ForeignKey(Course,null=True,blank=True)
+    tutorKey = models.ManyToManyField(Tutor, related_name="tutor",blank=True)
+    tutorName = models.CharField(max_length=20,null=True,blank=True)
+    objects = EventManager()
 
 
 class TagManager(models.Manager):
-	def create_event(self, tag=None, event=None):
-		event = self.create(tag=tag, event=event)
-		return event
+    def create_event(self, tag=None, event=None):
+        event = self.create(tag=tag, event=event)
+        return event
+
 
 class Tag(models.Model):
-	tag = models.CharField(max_length=200)
-	event = models.ManyToManyField(Event, related_name='event')
-	objects = TagManager()
+    tag = models.CharField(max_length=200)
+    event = models.ManyToManyField(Event, related_name='event')
+    objects = TagManager()
+
 
 class ScheduleManager(models.Manager):
-	def create_schedule(self, user=None):
-		schedule = self.create(user=user)
-		return schedule
+    def create_schedule(self, user=None):
+        schedule = self.create(user=user)
+        return schedule
+
 
 class Schedule(models.Model):
-	user = models.ForeignKey(User, related_name = "user_booking")
+    user = models.ForeignKey(User, related_name = "user_booking")
+
 
 class DataPictureMapping(models.Model):
-	name = models.CharField(max_length=300)
-	dataID = models.CharField(max_length=200)
-	dataType = models.IntegerField()
-	subID = models.IntegerField()
-	pictureUrl = models.URLField()
-	sort = models.IntegerField()
-	registered_by = models.CharField(max_length=100)
-	registered_at = models.DateTimeField(auto_now_add=True)
-	updated_by = models.CharField(max_length=100)
-	updated_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=300)
+    dataID = models.CharField(max_length=200)
+    dataType = models.IntegerField()
+    subID = models.IntegerField()
+    pictureUrl = models.URLField()
+    sort = models.IntegerField()
+    registered_by = models.CharField(max_length=100)
+    registered_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.CharField(max_length=100)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
 

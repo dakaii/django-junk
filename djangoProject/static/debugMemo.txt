@@ -12,13 +12,14 @@ http -f POST http://127.0.0.1:8000/authentication/ access_token=EAACEdEose0cBAMl
 
 
 http -f POST http://127.0.0.1:8000/authentication/ username='chime' password='charin' location=omotesandou email=chime@gmail.com
+http -f POST http://127.0.0.1:8000/authentication/ username='chime' password='charin' location=omotesandou email=123@gmail.com
 
 
 
 curl -X Delete http://127.0.0.1:8000/logout/ -H 'Authorization: Token 89acfe32be5e9ee04f9bce730e902f4921a55ef6'
 
 
-http -f POST http://127.0.0.1:8000/location/ location="San Diego"  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
+http -f POST http://127.0.0.1:8000/location/ location="渋谷"  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
 
 
 http -f POST http://127.0.0.1:8000/shop/ shop_name=omise location="San Diego"  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
