@@ -14,6 +14,8 @@ from django.contrib.auth.decorators import login_required
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from .location import save_location, obtain_location
+import pdb
+
 
 
 class LocationViewSet(viewsets.ModelViewSet):
@@ -27,8 +29,8 @@ class LocationViewSet(viewsets.ModelViewSet):
                 location_name = request.POST.get('location_name'); original_id = request.POST.get('original_id')
                 access = request.POST.get('access'); city=request.POST.get('city'); state=request.POST.get('state')
                 zipcode = request.POST.get('zipcode');  longitude=request.POST.get('longitude'); latitude=request.POST.get('latitude')
-                address = request.POST.get('address'); county_code = request.POST.get('county_code')
-                result = save_location('chime', location_name, original_id, access, state, zipcode, longitude, latitude, address, county_code)['result']
+                address = request.POST.get('address'); country_code = request.POST.get('country_code')
+                result = save_location('chime', location_name, original_id, access, city, state, zipcode, longitude, latitude, address, country_code)['result']
                 return Response(result)
             except Exception:
                 return Response({"error": "error"},
@@ -41,7 +43,7 @@ class LocationViewSet(viewsets.ModelViewSet):
                 save_result = save_location(username, location_name=location['location_name'],
                                             original_id=location['original_id'], access=None, city=None, state=None,
                                             zipcode=None, longitude=location['longitude'], latitude=location['latitude'],
-                                            address=location['address'], county_code=None)['result']
+                                            address=location['address'], country_code=None)['result']
                 if save_result == 'success':
                     return Response({'successfully saved': location_name})
                 elif save_result == 'duplicate':

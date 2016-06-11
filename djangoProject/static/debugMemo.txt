@@ -5,10 +5,14 @@ SOCIAL_AUTH_FACEBOOK_SECRET = 'ce8ba5f8607988faace4591f87cdba49'
 
 curl -i -X GET "https://graph.facebook.com/oauth/access_token?client_id=640270719458713&client_secret=ce8ba5f8607988faace4591f87cdba49&grant_type=client_credentials"
 
+http "https://graph.facebook.com/oauth/access_token?client_id=640270719458713&client_secret=ce8ba5f8607988faace4591f87cdba49&grant_type=client_credentials"
+
+https://graph.facebook.com/640270719458713/accounts/test-users?installed=true&permissions=read_stream&method=post&access_token=640270719458713|ipLlu8Exbo3rqE_Du5-KQTz2qyI
+
 http POST 127.0.0.1:8000/token_auth/ username='Daiki Nakashita' password='fAsSrU68Wd'
 
 
-http -f POST http://127.0.0.1:8000/authentication/ access_token=EAACEdEose0cBAMl6QCiLDtKkdDCtVKtXBXiBv4FI2ZCDvtJslgMf7vhwEvUDZBPagpePZCVve0kIRRqyTmMLWjsnyKxZC4BHzcxxN208LQexwIOkKYLUtOLgxlP3bnrZBHRLrZAdzKQIWzZBALso1QKfiHqjTCNyZBZCOUPgENqifXwZDZD
+http -f POST http://127.0.0.1:8000/authentication/ access_token=EAAJGUqTLHZAkBAOPpz0kUymHMjnl3o3tF1cZAEm0llZAoZAE1agUzRbOWhKYp5g5DNk0yWWXDbbI2xIhpVyjeShNhUpAkuZBgXlaZCJzOx5eYZARzZCUZCZAEjwUxBEEtQlvCAeN8n2RWjlydRwPiWkI7iwR4bZA8VXDhz0mIpIt590EYYZBRLfRGKo1
 
 
 http -f POST http://127.0.0.1:8000/authentication/ username='chime' password='charin' location=omotesandou email=chime@gmail.com
@@ -45,10 +49,11 @@ http -f GET http://127.0.0.1:8000/users/1
 
 
 
+http -f POST http://127.0.0.1:8000/location/ datastore=True location_name="San Diego" original_id='sdasdfa' access='asdf', state='344' zipcode='sdf' longitude=234.234 latitude=2342.234 address='32' country_code='3234'  'Authorization: Token 775004fbaea909f11589fd3f7727135474b3c982'
 
 
 
-
+http -f POST https://chimeproject.herokuapp.com/location/ datastore=True location_name="San Diego" original_id='sdasdfa' access='asdf', state='344' zipcode='sdf' longitude=234.234 latitude=2342.234 address='32' country_code='3234'  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
 
 
 

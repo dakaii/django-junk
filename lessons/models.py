@@ -27,8 +27,8 @@ class Password(models.Model):
 
 
 class LocationManager(models.Manager):
-    def create_location(self, location_name=None, original_id=None, access=None, city=None, state=None, zipcode=None, longitude=None, latitude=None, address=None, county_code=None, registered_by=None, updated_by=None):
-        location = self.create(location_name=location_name, original_id=original_id, access=access, city=city, state=state, zipcode=zipcode, longitude=longitude, latitude=latitude, address=address, county_code=county_code, registered_by=registered_by, updated_by=updated_by)
+    def create_location(self, location_name=None, original_id=None, access=None, city=None, state=None, zipcode=None, longitude=None, latitude=None, address=None, country_code=None, registered_by=None, updated_by=None):
+        location = self.create(location_name=location_name, original_id=original_id, access=access, city=city, state=state, zipcode=zipcode, longitude=longitude, latitude=latitude, address=address, country_code=country_code, registered_by=registered_by, updated_by=updated_by)
         return location
 
 
@@ -37,12 +37,12 @@ class Location(models.Model):
     original_id = models.CharField(max_length=100, null=True, blank=True)
     access = models.CharField(max_length=300, null=True,blank=True)
     city = models.CharField(max_length=50,null=True,blank=True)
-    state = models.IntegerField(null=True,blank=True)
+    state = models.CharField(max_length=5,null=True,blank=True)
     zipcode = models.CharField(max_length=50,null=True,blank=True)
     longitude = models.FloatField(null=True)
     latitude = models.FloatField(null=True)
     address = models.CharField(max_length=300)
-    county_code = models.IntegerField(null=True,blank=True)
+    country_code = models.CharField(max_length=5,null=True,blank=True)
     registered_by = models.CharField(max_length=100)
     registered_at = models.DateTimeField(auto_now_add=True)
     updated_by = models.CharField(max_length=100)

@@ -7,11 +7,11 @@ from django.utils.translation import to_locale, get_language
 import pdb
 
 
-def save_location(username, location_name, original_id, access, city, state, zipcode, longitude, latitude, address, county_code):
+def save_location(username, location_name, original_id, access, city, state, zipcode, longitude, latitude, address, country_code):
     if not Location.objects.filter(location_name=location_name, longitude=longitude, latitude=latitude):
         location = Location.objects.create_location(location_name, original_id, access, city, state=state,
                                                     zipcode=zipcode, longitude=longitude, latitude=latitude,
-                                                    address=address, county_code=county_code, registered_by=username,
+                                                    address=address, country_code=country_code, registered_by=username,
                                                     updated_by=username)
         return {'result': 'success', 'location': location}
     else:
@@ -48,7 +48,7 @@ def user_location(location, username):
     except Location.DoesNotExist:
         location = save_location(username=username, location_name=location_name, original_id=original_id, access=None, city=None,
                                  state=None, zipcode=None, longitude=longitude, latitude=latitude, address=address,
-                                 county_code=None)['location']
+                                 country_code=None)['location']
     except Location.MultipleObjectsReturned:
         location=Location.objects.filter(location_name=location_name, longitude=longitude, latitude=latitude).order_by('id').first()
         #I need to delete the rest.

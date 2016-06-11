@@ -58,7 +58,7 @@ class Login(generics.CreateAPIView):
             return Response({"errors": "Not enough arguments"},
                             status=status.HTTP_400_BAD_REQUEST)
 # --------------------------------------------------------------
-        if User.objects.filter(email=email) is None and User.objects.filter(username=username) is None:
+        if not User.objects.filter(email=email) and not User.objects.filter(username=username):
             location = obtain_location(request, location_name, longitude, latitude)
             if location is not None:
                 location = user_location(location=location, username=username)
