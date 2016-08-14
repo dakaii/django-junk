@@ -53,7 +53,7 @@ http -f POST http://127.0.0.1:8000/location/ datastore=True location_name="San D
 
 
 
-http -f POST https://chimeproject.herokuapp.com/location/ datastore=True location_name="San Diego" original_id='sdasdfa' access='asdf', state='344' zipcode='sdf' longitude=234.234 latitude=2342.234 address='32' country_code='3234'  'Authorization: Token aa757f9fe121edd91085192a188e9d3848f0a3eb'
+http -f POST https://chimeproject.herokuapp.com/location/ datastore=True location_name="San Diego" original_id='sdasdfa' access='asdf', state='344' zipcode='sdf' longitude=234.234 latitude=2342.234 address='32' country_code='3234'  'Authorization: Token 5cf01f15274693b74f46a0ff07c186189acdc8af'
 
 
 

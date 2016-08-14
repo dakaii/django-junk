@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import User, Tutor, Schedule
 from .models import Location, Event, Shop, Tag, Tutor, Course
+from .models import TagMapping, DataPictureMapping
 
 
 class LocationSerializer(serializers.ModelSerializer):
@@ -44,7 +45,7 @@ class TagSerializer(serializers.ModelSerializer):
 
 class ScheduleSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
-#    event = serializers.StringRelatedField(many=True)
+    
     class Meta:
         model = Schedule
         fields = ('id', 'user')
@@ -60,6 +61,17 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = ('id', 'title')
+
+
+class TagMappingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TagMapping
+        fields = ('id', 'name')
+
+class DataPictureMappingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DataPictureMapping
+        fields = ('id', 'name')
 
 
 class UserSerializer(serializers.ModelSerializer):

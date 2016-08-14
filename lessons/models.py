@@ -5,6 +5,7 @@ from rest_framework.authtoken.models import Token
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
+from django.contrib.postgres.fields import ArrayField
 
 
 # This code is triggered whenever a new user has been created and saved to the database
@@ -128,7 +129,7 @@ class EventManager(models.Manager):
 class Event(models.Model):
     title = models.CharField(max_length=100)
     date = models.DateField(null=True, blank=True)
-    day_of_week = models.IntegerField(null=True,blank=True)
+    day_of_week= ArrayField(models.BooleanField(default=false), blank=True, size=7)
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     time_type = models.IntegerField()
@@ -145,13 +146,18 @@ class Event(models.Model):
 
 
 class TagManager(models.Manager):
-    def create_event(self, tag=None, event=None):
-        event = self.create(tag=tag, event=event)
+    def create_tag(self, tag=None, dataID=None, registered_by=None, registered_at=None, updated_by=None, updated_at=None, event=None):
+        event = self.create(tag=tag, dataID=dataID, registered_by=registered_by, registered_at=registered_at, updated_by=updated_by, updated_at=updated_at, event=event)
         return event
 
 
 class Tag(models.Model):
     tag = models.CharField(max_length=200)
+    dataID = models.CharField(max_length=200)
+    registered_by = models.CharField(max_length=100)
+    registered_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.CharField(max_length=100)
+    updated_at = models.DateTimeField(auto_now_add=True)
     event = models.ManyToManyField(Event, related_name='event')
     objects = TagManager()
 
@@ -166,6 +172,28 @@ class Schedule(models.Model):
     user = models.ForeignKey(User, related_name = "user_booking")
 
 
+class TagMappingManager(models.Manager):
+    def create_tagMapping(self, user=None, dataID=None, dataType=None, registered_by=None, registered_at=None, updated_by=None, updated_at=None):
+        tagMapping = self.create(user=user,dataID=dataID, dataType=dataType, registered_by=registered_by,registered_at=registered_at, updated_by=updated_by,updated_at=updated_at)
+        return tagMapping
+
+
+class TagMapping(models.Model):
+    name = models.CharField(max_length=300)
+    dataID = models.CharField(max_length=200)
+    dataType = models.IntegerField()
+    registered_by = models.CharField(max_length=100)
+    registered_at = models.DateTimeField(auto_now_add=True)
+    updated_by = models.CharField(max_length=100)
+    updated_at = models.DateTimeField(auto_now_add=True)
+    objects = TagMappingManager()
+
+
+class DataPictureMappingManager(models.Manager):
+    def create_dataPictureMapping(self, name=None, dataID=None, dataType=None, subID=None, pictureUrl=None, sort=None, registered_by=None, registered_at=None, updated_by=None, updated_at=None):
+        DataPictureMapping = self.create(name=name,dataID=dataID,dataType=dataType, subID=subID, pictureUrl=pictureUrl,sort=sort, registered_by=registered_by, registered_at=registered_at,updated_by=updated_by, updated_at=updated_at)
+        return DataPictureMapping
+
 class DataPictureMapping(models.Model):
     name = models.CharField(max_length=300)
     dataID = models.CharField(max_length=200)
@@ -177,5 +205,6 @@ class DataPictureMapping(models.Model):
     registered_at = models.DateTimeField(auto_now_add=True)
     updated_by = models.CharField(max_length=100)
     updated_at = models.DateTimeField(auto_now_add=True)
+    objects = DataPictureMappingManager()
 
 

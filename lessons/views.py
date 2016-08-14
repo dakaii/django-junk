@@ -1,4 +1,5 @@
 from .models import Location, User, Tutor, Schedule, Tag, Shop, Event, Course
+from .models import TagMapping, DataPictureMapping
 from rest_framework.decorators import api_view, detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -7,6 +8,7 @@ from django.shortcuts import get_object_or_404
 
 from .serializers import LocationSerializer, UserSerializer,UserDetailSerializer, ShopSerializer
 from .serializers import EventSerializer, TagSerializer, ScheduleSerializer, TutorSerializer, CourseSerializer
+from .serializers import TagMappingSerializer, DataPictureMappingSerializer
 from .permissions import IsOwnerOrReadOnly, IsAuthenticatedOrCreate
 from rest_framework import generics, renderers, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny#, IsAdminOrIsSelf
@@ -59,6 +61,12 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     serializer_class = ScheduleSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
+    def create(self, request, **kwargs):
+        if request.POST.get('datastore'):
+            # nothing
+        else:
+            #
+
 
 class ShopViewSet(viewsets.ModelViewSet):
     queryset = Shop.objects.all()
@@ -66,21 +74,24 @@ class ShopViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
     def create(self, request, **kwargs):
-        shop_name=request.POST.get('shop_name')
-        shop_owner=request.user
-        try:
-            location=save_location(request)['location']
-        except Exception:
-            return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-        try:
-            shop=Shop.objects.get(shop_name=shop_name,shop_location=location)
-            return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-        except Shop.DoesNotExist:
-            shop = Shop.objects.create_shop(shop_name=shop_name, user_editable=True, registered_by=shop_owner, updated_by=shop_owner, shop_owner=shop_owner, shop_location=location)
-            return Response({'successfully saved': shop.shop_name})
-        except Shop.MultipleObjectsReturned:
-            shop=Shop.objects.filter(shop_name=shop_name,location=location).order_by('id').first()
-            return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+        if request.POST.get('datastore'):
+            #
+        else:
+            shop_name=request.POST.get('shop_name')
+            shop_owner=request.user
+            try:
+                location=save_location(request)['location']
+            except Exception:
+                return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+            try:
+                shop=Shop.objects.get(shop_name=shop_name,shop_location=location)
+                return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+            except Shop.DoesNotExist:
+                shop = Shop.objects.create_shop(shop_name=shop_name, user_editable=True, registered_by=shop_owner, updated_by=shop_owner, shop_owner=shop_owner, shop_location=location)
+                return Response({'successfully saved': shop.shop_name})
+            except Shop.MultipleObjectsReturned:
+                shop=Shop.objects.filter(shop_name=shop_name,location=location).order_by('id').first()
+                return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
 
 
 class EventViewSet(viewsets.ModelViewSet):
@@ -89,29 +100,32 @@ class EventViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
     
     def create(self, request, **kwargs):
-        title=request.POST.get('title')
-        username=request.user.username
-        start_time = request.POST.get('start_time')
-        end_time = request.POST.get('end_time')
-        time_type = request.POST.get('time_type')
-        try:
-            location=save_location(request)['location']
-            if request.POST.get('shop_name') is not None:
-                shop=Shop.objects.filter(shop_name=request.POST.get('shop_name'),shop_location=location).order_by('id').first()
-                location=shop.shop_location
-            else:
-                shop=None
-        except Exception:
-            return Response({"errors": "The provided info could not be validated."},status=status.HTTP_400_BAD_REQUEST)
-        try:
-            event=Event.objects.get(title=title,location=location)
-            return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-        except Event.DoesNotExist:
-            event = Event.objects.create_event(title=title, date=request.POST.get('date'), day_of_week=request.POST.get('day_of_week'), start_time=start_time, end_time=end_time, time_type=time_type, registered_by=username, updated_by=username, shop=shop, location=location)
-            return Response({'successfully saved': event.title})
-        except Event.MultipleObjectsReturned:
-            shop=Shop.objects.filter(title=title,location=location).order_by('id').first()
-            return Response({"errors": "This data already exists in the database."}, status=status.HTTP_400_BAD_REQUEST)
+        if request.POST.get('datastore'):
+            #
+        else:
+            title=request.POST.get('title')
+            username=request.user.username
+            start_time = request.POST.get('start_time')
+            end_time = request.POST.get('end_time')
+            time_type = request.POST.get('time_type')
+            try:
+                location=save_location(request)['location']
+                if request.POST.get('shop_name') is not None:
+                    shop=Shop.objects.filter(shop_name=request.POST.get('shop_name'),shop_location=location).order_by('id').first()
+                    location=shop.shop_location
+                else:
+                    shop=None
+            except Exception:
+                return Response({"errors": "The provided info could not be validated."},status=status.HTTP_400_BAD_REQUEST)
+            try:
+                event=Event.objects.get(title=title,location=location)
+                return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+            except Event.DoesNotExist:
+                event = Event.objects.create_event(title=title, date=request.POST.get('date'), day_of_week=request.POST.get('day_of_week'), start_time=start_time, end_time=end_time, time_type=time_type, registered_by=username, updated_by=username, shop=shop, location=location)
+                return Response({'successfully saved': event.title})
+            except Event.MultipleObjectsReturned:
+                shop=Shop.objects.filter(title=title,location=location).order_by('id').first()
+                return Response({"errors": "This data already exists in the database."}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class TagViewSet(viewsets.ModelViewSet):
@@ -119,8 +133,11 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
-#    def create(self, request, **kwargs):
+    def create(self, request, **kwargs):
+        if request.POST.get('datastore'):
+            
 
+        else:
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
@@ -128,21 +145,26 @@ class CourseViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
     def create(self, request, **kwargs):
-        title=request.POST.get('title')
-        username=request.user.username
-        description = request.POST.get('description')
-        original_id = request.POST.get('original_id')
-    """
-    try:
-        event=Course.objects.get(title=title)
-        return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-    except Event.DoesNotExist:
-        event = Event.objects.create_event(title=title, date=request.POST.get('date'), day_of_week=request.POST.get('day_of_week'), start_time=start_time, end_time=end_time, time_type=time_type, registered_by=username, updated_by=username, shop=shop, location=location)
-        return Response({'successfully saved': event.title})
-    except Event.MultipleObjectsReturned:
-        shop=Shop.objects.filter(title=title,location=location).order_by('id').first()
-        return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-    """
+        if request.POST.get('datastore'):
+            #create
+            #check mapping
+            #return
+        else:
+            title=request.POST.get('title')
+            username=request.user.username
+            description = request.POST.get('description')
+            original_id = request.POST.get('original_id')
+            """
+            try:
+                event=Course.objects.get(title=title)
+                return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+            except Event.DoesNotExist:
+                event = Event.objects.create_event(title=title, date=request.POST.get('date'), day_of_week=request.POST.get('day_of_week'), start_time=start_time, end_time=end_time, time_type=time_type, registered_by=username, updated_by=username, shop=shop, location=location)
+                return Response({'successfully saved': event.title})
+            except Event.MultipleObjectsReturned:
+                shop=Shop.objects.filter(title=title,location=location).order_by('id').first()
+                return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+            """
 
 
 class TutorViewSet(viewsets.ModelViewSet):
@@ -150,6 +172,44 @@ class TutorViewSet(viewsets.ModelViewSet):
     serializer_class = TutorSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
+    def create(self, request, **kwargs):
+        if request.POST.get('datastore'):
+            #create
+            #check mapping
+            #return
+
+        else:
+            #
+
+
+class TagMappingViewSet(viewsets.ModelViewSet):
+    queryset = TagMapping.objects.all()
+    serializer_class = TagMappingSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+
+    def create(self, request, **kwargs):
+        if request.POST.get('datastore'):
+            #create
+            #check mapping
+            #return
+            #
+
+        else:
+            #
+
+class DataPictureMappingViewSet(viewsets.ModelViewSet):
+    queryset = DataPictureMapping.objects.all()
+    serializer_class = DataPictureMappingSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+
+    def create(self, request, **kwargs):
+        if request.POST.get('datastore'):
+            #create
+            #check mapping
+            #return
+
+        else:
+            #
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()
