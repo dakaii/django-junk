@@ -54,7 +54,7 @@ class LocationViewSet(viewsets.ModelViewSet):
             else:
                 return Response({"errors": "Connection timeout"},
                                 status=status.HTTP_400_BAD_REQUEST)
-
+"""
 
 class ScheduleViewSet(viewsets.ModelViewSet):
     queryset = Schedule.objects.all()
@@ -138,7 +138,7 @@ class TagViewSet(viewsets.ModelViewSet):
             
 
         else:
-"""
+
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
