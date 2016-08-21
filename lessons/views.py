@@ -138,7 +138,7 @@ class TagViewSet(viewsets.ModelViewSet):
             
 
         else:
-
+"""
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
@@ -154,17 +154,6 @@ class CourseViewSet(viewsets.ModelViewSet):
             username=request.user.username
             description = request.POST.get('description')
             original_id = request.POST.get('original_id')
-            """
-            try:
-                event=Course.objects.get(title=title)
-                return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-            except Event.DoesNotExist:
-                event = Event.objects.create_event(title=title, date=request.POST.get('date'), day_of_week=request.POST.get('day_of_week'), start_time=start_time, end_time=end_time, time_type=time_type, registered_by=username, updated_by=username, shop=shop, location=location)
-                return Response({'successfully saved': event.title})
-            except Event.MultipleObjectsReturned:
-                shop=Shop.objects.filter(title=title,location=location).order_by('id').first()
-                return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-            """
 
 
 class TutorViewSet(viewsets.ModelViewSet):
@@ -210,6 +199,8 @@ class DataPictureMappingViewSet(viewsets.ModelViewSet):
 
         else:
             #
+"""
+
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()

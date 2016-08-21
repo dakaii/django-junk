@@ -208,3 +208,19 @@ class DataPictureMapping(models.Model):
     objects = DataPictureMappingManager()
 
 
+class ShopItemManager(models.Manager):
+    def create_shopItem(self, name=None, pictureUrl = None, description = None, price = None):
+        shop_item = self.create(name=name, pictureUrl=pictureUrl, description=description, price=price)
+        return shop_item
+
+
+class ShopItem(models.Model):
+    name = models.CharField(max_length=300)
+    pictureUrl = models.URLField(null=true, )
+    description = models.CharField(max_length = 500)
+    price = models.CharField(max_length = 500)
+
+
+
+
+
