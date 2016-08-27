@@ -54,25 +54,25 @@ class LocationViewSet(viewsets.ModelViewSet):
             else:
                 return Response({"errors": "Connection timeout"},
                                 status=status.HTTP_400_BAD_REQUEST)
-"""
+
 
 class ScheduleViewSet(viewsets.ModelViewSet):
     queryset = Schedule.objects.all()
     serializer_class = ScheduleSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-
+"""
     def create(self, request, **kwargs):
         if request.POST.get('datastore'):
             # nothing
         else:
             #
-
+"""
 
 class ShopViewSet(viewsets.ModelViewSet):
     queryset = Shop.objects.all()
     serializer_class = ShopSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-
+"""
     def create(self, request, **kwargs):
         if request.POST.get('datastore'):
             #
@@ -92,13 +92,13 @@ class ShopViewSet(viewsets.ModelViewSet):
             except Shop.MultipleObjectsReturned:
                 shop=Shop.objects.filter(shop_name=shop_name,location=location).order_by('id').first()
                 return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-
+"""
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-    
+"""
     def create(self, request, **kwargs):
         if request.POST.get('datastore'):
             #
@@ -126,24 +126,28 @@ class EventViewSet(viewsets.ModelViewSet):
             except Event.MultipleObjectsReturned:
                 shop=Shop.objects.filter(title=title,location=location).order_by('id').first()
                 return Response({"errors": "This data already exists in the database."}, status=status.HTTP_400_BAD_REQUEST)
-
+"""
 
 class TagViewSet(viewsets.ModelViewSet):
+
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-
+"""
     def create(self, request, **kwargs):
         if request.POST.get('datastore'):
             
 
         else:
+"""
 
 class CourseViewSet(viewsets.ModelViewSet):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
+
+"""
     def create(self, request, **kwargs):
         if request.POST.get('datastore'):
             #create
@@ -154,21 +158,15 @@ class CourseViewSet(viewsets.ModelViewSet):
             username=request.user.username
             description = request.POST.get('description')
             original_id = request.POST.get('original_id')
-
+"""
 
 class TutorViewSet(viewsets.ModelViewSet):
     queryset = Tutor.objects.all()
     serializer_class = TutorSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
-    def create(self, request, **kwargs):
-        if request.POST.get('datastore'):
-            #create
-            #check mapping
-            #return
+#    def create(self, request, **kwargs):
 
-        else:
-            #
 
 
 class TagMappingViewSet(viewsets.ModelViewSet):
@@ -176,14 +174,8 @@ class TagMappingViewSet(viewsets.ModelViewSet):
     serializer_class = TagMappingSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
-    def create(self, request, **kwargs):
-        if request.POST.get('datastore'):
-            #create
-            #check mapping
-            #return
-            #
+#    def create(self, request, **kwargs):
 
-        else:
             #
 
 class DataPictureMappingViewSet(viewsets.ModelViewSet):
@@ -191,15 +183,9 @@ class DataPictureMappingViewSet(viewsets.ModelViewSet):
     serializer_class = DataPictureMappingSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
-    def create(self, request, **kwargs):
-        if request.POST.get('datastore'):
-            #create
-            #check mapping
-            #return
+#    def create(self, request, **kwargs):
 
-        else:
-            #
-"""
+
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):

@@ -216,7 +216,7 @@ class ShopItemManager(models.Manager):
 
 class ShopItem(models.Model):
     name = models.CharField(max_length=300)
-    pictureUrl = models.URLField(null=true, blank=true)
+    pictureUrl = models.URLField(null=True, blank=True)
     description = models.CharField(max_length = 500)
     price = models.CharField(max_length = 500)
 

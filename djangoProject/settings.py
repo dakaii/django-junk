@@ -87,26 +87,26 @@ WSGI_APPLICATION = 'djangoProject.wsgi.application'
 # Update database configuration with $DATABASE_URL.
 #if not 'DATABASE_URL' in os.environ:
 #    os.environ['DATABASE_URL'] = 'postgres://qdvhboeogqfxst:aX1EdOLLTEn81yj7492fK2_aQ_@ec2-107-21-101-67.compute-1.amazonaws.com:5432/dbuh639t95mo72'
-if not DEBUG:
+if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'dbuh639t95mo72',
-            'USER': 'qdvhboeogqfxst',
-            'PASSWORD': 'aX1EdOLLTEn81yj7492fK2_aQ_',
-            'HOST': 'ec2-107-21-101-67.compute-1.amazonaws.com',
-            'PORT': '5432',
+            'NAME': 'qro',
+            'USER': '',
+            'PASSWORD': '',
+            'HOST': 'localhost',
+            'PORT': '',
         }
     }
 else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': 'chime',
-            'USER': '',
-            'PASSWORD': '',
-            'HOST': 'localhost',
-            'PORT': '',
+            'NAME': 'd943rmcrm9odib',
+            'USER': 'uogbnfcwcesbtd',
+            'PASSWORD': 'F-CehUGWSd65KNgYK-RAWmW_-A',
+            'HOST': 'ec2-107-22-250-212.compute-1.amazonaws.com',
+            'PORT': '5432',
         }
     }
 
