@@ -39,7 +39,7 @@ class Login(generics.CreateAPIView):
                 username = user_json['name']
                 facebook_id = user_json['id']
                 email = user_json['email']
-                location_name = user_json['location']['name']; longitude = None; latitude = None;
+                #location_name = user_json['location']['name']; longitude = None; latitude = None;
                 new_password = None
                 if not Password.objects.filter(email=email):
                     new_password = User.objects.make_random_password()
@@ -48,26 +48,27 @@ class Login(generics.CreateAPIView):
                                 status=status.HTTP_400_BAD_REQUEST)
 
         elif request.POST.get('email') is not None and request.POST.get('password') is not None\
-                and request.POST.get('username') is not None and request.POST.get('location') is not None:
+                                        and request.POST.get('username') is not None:
+#                and request.POST.get('username') is not None and request.POST.get('location') is not None:
             username = request.POST.get('username')
             facebook_id = None
             email = request.POST.get('email')
-            location_name = request.POST.get('location'); longitude = request.POST.get('longitude'); latitude = request.POST.get('latitude')
+            #location_name = request.POST.get('location'); longitude = request.POST.get('longitude'); latitude = request.POST.get('latitude')
             new_password = request.POST.get('password')
         else:
             return Response({"errors": "Not enough arguments"},
                             status=status.HTTP_400_BAD_REQUEST)
 # --------------------------------------------------------------
         if not User.objects.filter(email=email) and not User.objects.filter(username=username):
-            location = obtain_location(request, location_name, longitude, latitude)
-            if location is not None:
-                location = user_location(location=location, username=username)
-                password = Password.objects.create_password(password=new_password, email=email)
+            #location = obtain_location(request, location_name, longitude, latitude)
+            #if location is not None:
+            #    location = user_location(location=location, username=username)
+            password = Password.objects.create_password(password=new_password, email=email)
                 # authentication fails when there's already a password in the password table but the user doesnt exist.
-                user = User.objects.create_user(username=username,facebook_id=facebook_id,password=password.password,email=email,location=location)
-            else:
-                return Response({"error": "unable to obtain the location info."},
-                                status=status.HTTP_400_BAD_REQUEST)
+            user = User.objects.create_user(username=username,facebook_id=facebook_id,password=password.password,email=email,location=location)
+            #else:
+            #    return Response({"error": "unable to obtain the location info."},
+            #                    status=status.HTTP_400_BAD_REQUEST)
         else:
             user = User.objects.filter(email=email, username=username).order_by('id').first()
         if user is not None:
