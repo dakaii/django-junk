@@ -47,8 +47,7 @@ class Login(generics.CreateAPIView):
                 return Response({"errors": "connection error"},
                                 status=status.HTTP_400_BAD_REQUEST)
 
-        elif request.POST.get('email') is not None and request.POST.get('password') is not None\
-                                        and request.POST.get('username') is not None:
+        elif request.POST.get('email') is not None and request.POST.get('password') is not None and request.POST.get('username') is not None:
 #                and request.POST.get('username') is not None and request.POST.get('location') is not None:
             username = request.POST.get('username')
             facebook_id = None
@@ -65,7 +64,8 @@ class Login(generics.CreateAPIView):
             #    location = user_location(location=location, username=username)
             password = Password.objects.create_password(password=new_password, email=email)
                 # authentication fails when there's already a password in the password table but the user doesnt exist.
-            user = User.objects.create_user(username=username,facebook_id=facebook_id,password=password.password,email=email,location=location)
+            user = User.objects.create_user(username=username,facebook_id=facebook_id,password=password.password,email=email)
+            #user = User.objects.create_user(username=username,facebook_id=facebook_id,password=password.password,email=email,location=location)
             #else:
             #    return Response({"error": "unable to obtain the location info."},
             #                    status=status.HTTP_400_BAD_REQUEST)

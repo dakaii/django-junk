@@ -11,6 +11,8 @@ https://graph.facebook.com/640270719458713/accounts/test-users?installed=true&pe
 
 http POST 127.0.0.1:8000/token_auth/ username='Daiki Nakashita' password='fAsSrU68Wd'
 
+http https://qro.herokuapp.com/token_auth/ username='Daiki Nakashita' password='fAsSrU68Wd'
+
 
 http -f POST http://127.0.0.1:8000/authentication/ access_token=EAAJGUqTLHZAkBAOPpz0kUymHMjnl3o3tF1cZAEm0llZAoZAE1agUzRbOWhKYp5g5DNk0yWWXDbbI2xIhpVyjeShNhUpAkuZBgXlaZCJzOx5eYZARzZCUZCZAEjwUxBEEtQlvCAeN8n2RWjlydRwPiWkI7iwR4bZA8VXDhz0mIpIt590EYYZBRLfRGKo1
 
