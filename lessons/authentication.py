@@ -19,7 +19,7 @@ from lessons.permissions import IsOwnerOrReadOnly, IsAuthenticatedOrCreate
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.decorators import detail_route, list_route
 from rest_framework.authtoken.models import Token
-from .location import user_location, obtain_location
+#from .location import user_location, obtain_location
 
 
 import pdb

@@ -35,18 +35,18 @@ class LocationManager(models.Manager):
 
 class Location(models.Model):
     location_name = models.CharField(max_length=100,null=True)
+    longitude = models.FloatField(null=True)
+    latitude = models.FloatField(null=True)
     original_id = models.CharField(max_length=100, null=True, blank=True)
-    access = models.CharField(max_length=300, null=True,blank=True)
+    direction = models.CharField(max_length=300, null=True,blank=True)
     city = models.CharField(max_length=50,null=True,blank=True)
     state = models.CharField(max_length=5,null=True,blank=True)
     zipcode = models.CharField(max_length=50,null=True,blank=True)
-    longitude = models.FloatField(null=True)
-    latitude = models.FloatField(null=True)
     address = models.CharField(max_length=300)
     country_code = models.CharField(max_length=5,null=True,blank=True)
     registered_by = models.CharField(max_length=100)
-    registered_at = models.DateTimeField(auto_now_add=True)
     updated_by = models.CharField(max_length=100)
+    registered_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     objects = LocationManager()
 
@@ -60,7 +60,7 @@ class User(AbstractUser):
     registered_at = models.DateTimeField(auto_now_add=True)
     location = models.OneToOneField(Location, null=True)
     phoneNumber = models.IntegerField(null=True)
-    chime_plan = models.CharField(max_length=50, null=True)
+    qro_plan = models.CharField(max_length=50, null=True)
 
     def __str__(self):
         return '%d: %s'%(self.id, self.username)
@@ -99,8 +99,8 @@ class Shop(models.Model):
     updated_by = models.CharField(max_length=100)
     registered_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
-    shop_owner = models.ForeignKey(User, related_name="shop_owner")
-    shop_location = models.ForeignKey(Location, related_name="shop_location")
+    shop_owner = models.ForeignKey(User, related_name="shop_owner", on_delete=models.CASCADE)
+    shop_location = models.ForeignKey(Location, related_name="shop_location", on_delete=models.CASCADE)
     objects = ShopManager()
 
 
@@ -139,7 +139,7 @@ class Event(models.Model):
     updated_at = models.DateTimeField(auto_now_add=True)
     location = models.ForeignKey(Location)
     shop = models.ForeignKey(Shop,null=True,blank=True)
-    course = models.ForeignKey(Course,null=True,blank=True)
+    course = models.ForeignKey(Course,null=True,blank=True, on_delete=models.CASCADE)
     tutorKey = models.ManyToManyField(Tutor, related_name="tutor",blank=True)
     tutorName = models.CharField(max_length=20,null=True,blank=True)
     objects = EventManager()
@@ -169,43 +169,7 @@ class ScheduleManager(models.Manager):
 
 
 class Schedule(models.Model):
-    user = models.ForeignKey(User, related_name = "user_booking")
-
-
-class TagMappingManager(models.Manager):
-    def create_tagMapping(self, user=None, dataID=None, dataType=None, registered_by=None, registered_at=None, updated_by=None, updated_at=None):
-        tagMapping = self.create(user=user,dataID=dataID, dataType=dataType, registered_by=registered_by,registered_at=registered_at, updated_by=updated_by,updated_at=updated_at)
-        return tagMapping
-
-
-class TagMapping(models.Model):
-    name = models.CharField(max_length=300)
-    dataID = models.CharField(max_length=200)
-    dataType = models.IntegerField()
-    registered_by = models.CharField(max_length=100)
-    registered_at = models.DateTimeField(auto_now_add=True)
-    updated_by = models.CharField(max_length=100)
-    updated_at = models.DateTimeField(auto_now_add=True)
-    objects = TagMappingManager()
-
-
-class DataPictureMappingManager(models.Manager):
-    def create_dataPictureMapping(self, name=None, dataID=None, dataType=None, subID=None, pictureUrl=None, sort=None, registered_by=None, registered_at=None, updated_by=None, updated_at=None):
-        DataPictureMapping = self.create(name=name,dataID=dataID,dataType=dataType, subID=subID, pictureUrl=pictureUrl,sort=sort, registered_by=registered_by, registered_at=registered_at,updated_by=updated_by, updated_at=updated_at)
-        return DataPictureMapping
-
-class DataPictureMapping(models.Model):
-    name = models.CharField(max_length=300)
-    dataID = models.CharField(max_length=200)
-    dataType = models.IntegerField()
-    subID = models.IntegerField()
-    pictureUrl = models.URLField()
-    sort = models.IntegerField()
-    registered_by = models.CharField(max_length=100)
-    registered_at = models.DateTimeField(auto_now_add=True)
-    updated_by = models.CharField(max_length=100)
-    updated_at = models.DateTimeField(auto_now_add=True)
-    objects = DataPictureMappingManager()
+    user = models.ForeignKey(User, related_name = "user_booking", on_delete=models.CASCADE)
 
 
 class ShopItemManager(models.Manager):
@@ -219,6 +183,13 @@ class ShopItem(models.Model):
     pictureUrl = models.URLField(null=True, blank=True)
     description = models.CharField(max_length = 500)
     price = models.CharField(max_length = 500)
+    category = models.CharField(max_length=500)
+
+
+class Category(models.Model):
+    name = models.CharField(max_length=300)
+
+
 
 
 

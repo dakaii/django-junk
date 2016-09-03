@@ -13,12 +13,12 @@ def save_location(username, location_name, original_id, access, city, state, zip
                                                     zipcode=zipcode, longitude=longitude, latitude=latitude,
                                                     address=address, country_code=country_code, registered_by=username,
                                                     updated_by=username)
-        return {'result': 'success', 'location': location}
+        return {'result': 'success', 'location': location.location_name, 'longitude': location.longitude, 'latitude': location.latitude}
     else:
         location=Location.objects.filter(location_name=location_name, longitude=longitude, latitude=latitude).order_by('id').first()
-        return {'result': 'duplicate', 'location': location.location_name}
+        return {'result': 'duplicate', 'location': location.location_name, 'longitude': location.longitude, 'latitude': location.latitude}
 
-
+"""
 def obtain_location(request, location_name=None, longitude=None, latitude=None):
     geolocator = GoogleV3(api_key='AIzaSyBsm-cUdvx4PBcC0RjpZ7qEGxkhY-x9T18')
     if location_name is not None:
@@ -53,3 +53,4 @@ def user_location(location, username):
         location=Location.objects.filter(location_name=location_name, longitude=longitude, latitude=latitude).order_by('id').first()
         #I need to delete the rest.
     return location
+"""

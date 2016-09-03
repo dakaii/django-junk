@@ -15,7 +15,7 @@ from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny#, IsA
 from django.contrib.auth.decorators import login_required
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
-from .location import save_location, obtain_location
+from .location import save_location#, obtain_location
 import pdb
 
 
@@ -26,6 +26,26 @@ class LocationViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
 
     def create(self, request, **kwargs):
+        try:
+            location_name = request.POST.get('location_name'); original_id = request.POST.get('original_id')
+            access = request.POST.get('access'); city=request.POST.get('city'); state=request.POST.get('state')
+            zipcode = request.POST.get('zipcode');  longitude=request.POST.get('longitude'); latitude=request.POST.get('latitude')
+            address = request.POST.get('address'); country_code = request.POST.get('country_code')
+            result = save_location('chime', location_name, original_id, access, city, state, zipcode, longitude, latitude, address, country_code)['result']
+            return Response(result)
+            if save_result['result'] == 'success':
+                return Response({'status': 'successfully saved'})
+            elif save_result['result'] == 'duplicate':
+                return Response({"status": "This data already exists in the database."},
+                                status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response({"status": "Connection timeout"},
+                                status=status.HTTP_400_BAD_REQUEST)
+        except Exception:
+            return Response({"status": "error"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+"""
         if request.POST.get('datastore'):
             try:
                 location_name = request.POST.get('location_name'); original_id = request.POST.get('original_id')
@@ -54,7 +74,7 @@ class LocationViewSet(viewsets.ModelViewSet):
             else:
                 return Response({"errors": "Connection timeout"},
                                 status=status.HTTP_400_BAD_REQUEST)
-
+"""
 
 class ScheduleViewSet(viewsets.ModelViewSet):
     queryset = Schedule.objects.all()
