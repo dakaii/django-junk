@@ -92,7 +92,7 @@ if DEBUG:
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
             'NAME': 'qro',
-            'USER': '',
+            'USER': 'dnakashi',
             'PASSWORD': '',
             'HOST': 'localhost',
             'PORT': '',
