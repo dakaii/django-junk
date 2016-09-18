@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import User, Tutor, Schedule
 from .models import Location, Event, Shop, Tag, Tutor, Course
-from .models import TagMapping, DataPictureMapping
+#from .models import TagMapping, DataPictureMapping
 from . models import ShopItem
 
 
@@ -63,7 +63,7 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = ('id', 'title')
 
-
+"""
 class TagMappingSerializer(serializers.ModelSerializer):
     class Meta:
         model = TagMapping
@@ -73,7 +73,7 @@ class DataPictureMappingSerializer(serializers.ModelSerializer):
     class Meta:
         model = DataPictureMapping
         fields = ('id', 'name')
-
+"""
 
 class ShopItemSerializer(serializers.ModelSerializer):
 #    shop_item = serializers.StringRelatedField()

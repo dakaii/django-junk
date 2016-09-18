@@ -1,5 +1,5 @@
 from .models import Location, User, Tutor, Schedule, Tag, Shop, Event, Course
-from .models import TagMapping, DataPictureMapping
+#from .models import TagMapping, DataPictureMapping
 from rest_framework.decorators import api_view, detail_route
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 
 from .serializers import LocationSerializer, UserSerializer,UserDetailSerializer, ShopSerializer
 from .serializers import EventSerializer, TagSerializer, ScheduleSerializer, TutorSerializer, CourseSerializer
-from .serializers import TagMappingSerializer, DataPictureMappingSerializer
+#from .serializers import TagMappingSerializer, DataPictureMappingSerializer
 from .permissions import IsOwnerOrReadOnly, IsAuthenticatedOrCreate
 from rest_framework import generics, renderers, viewsets
 from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny#, IsAdminOrIsSelf
@@ -188,7 +188,7 @@ class TutorViewSet(viewsets.ModelViewSet):
 #    def create(self, request, **kwargs):
 
 
-
+"""
 class TagMappingViewSet(viewsets.ModelViewSet):
     queryset = TagMapping.objects.all()
     serializer_class = TagMappingSerializer
@@ -205,7 +205,7 @@ class DataPictureMappingViewSet(viewsets.ModelViewSet):
 
 #    def create(self, request, **kwargs):
 
-
+"""
 
 
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
