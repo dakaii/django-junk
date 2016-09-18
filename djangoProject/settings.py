@@ -95,7 +95,7 @@ if DEBUG:
             'USER': 'dnakashi',
             'PASSWORD': '',
             'HOST': 'localhost',
-            'PORT': '',
+            'PORT': '5432',
         }
     }
 else:
