@@ -129,7 +129,7 @@ class EventManager(models.Manager):
 class Event(models.Model):
     title = models.CharField(max_length=100)
     date = models.DateField(null=True, blank=True)
-    day_of_week= ArrayField(models.BooleanField(default=False), blank=True, size=7)
+    #day_of_week= ArrayField(models.BooleanField(default=False), blank=True, size=7)
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     time_type = models.IntegerField()
