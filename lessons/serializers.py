@@ -63,6 +63,11 @@ class CourseSerializer(serializers.ModelSerializer):
         model = Course
         fields = ('id', 'title')
 
+class ShopItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ShopItem
+        fields = ('id', 'item_name')
+
 """
 class TagMappingSerializer(serializers.ModelSerializer):
     class Meta:

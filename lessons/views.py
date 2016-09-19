@@ -1,4 +1,4 @@
-from .models import Location, User, Tutor, Schedule, Tag, Shop, Event, Course
+from .models import Location, User, Tutor, Schedule, Tag, Shop, ShopItem, Event, Course
 #from .models import TagMapping, DataPictureMapping
 from rest_framework.decorators import api_view, detail_route
 from rest_framework.response import Response
@@ -6,7 +6,7 @@ from rest_framework.reverse import reverse
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 
-from .serializers import LocationSerializer, UserSerializer,UserDetailSerializer, ShopSerializer
+from .serializers import LocationSerializer, UserSerializer,UserDetailSerializer, ShopSerializer, ShopItemSerializer
 from .serializers import EventSerializer, TagSerializer, ScheduleSerializer, TutorSerializer, CourseSerializer
 #from .serializers import TagMappingSerializer, DataPictureMappingSerializer
 from .permissions import IsOwnerOrReadOnly, IsAuthenticatedOrCreate
@@ -45,36 +45,6 @@ class LocationViewSet(viewsets.ModelViewSet):
             return Response({"status": "error"},
                             status=status.HTTP_400_BAD_REQUEST)
 
-"""
-        if request.POST.get('datastore'):
-            try:
-                location_name = request.POST.get('location_name'); original_id = request.POST.get('original_id')
-                access = request.POST.get('access'); city=request.POST.get('city'); state=request.POST.get('state')
-                zipcode = request.POST.get('zipcode');  longitude=request.POST.get('longitude'); latitude=request.POST.get('latitude')
-                address = request.POST.get('address'); country_code = request.POST.get('country_code')
-                result = save_location('chime', location_name, original_id, access, city, state, zipcode, longitude, latitude, address, country_code)['result']
-                return Response(result)
-            except Exception:
-                return Response({"error": "error"},
-                                status=status.HTTP_400_BAD_REQUEST)
-        else:
-            username = request.user.username
-            location_name = request.POST.get('location'); longitude = request.POST.get('longitude'); latitude = request.POST.get('latitude')
-            location = obtain_location(request, location_name, longitude, latitude)
-            if location is not None:
-                save_result = save_location(username, location_name=location['location_name'],
-                                            original_id=location['original_id'], access=None, city=None, state=None,
-                                            zipcode=None, longitude=location['longitude'], latitude=location['latitude'],
-                                            address=location['address'], country_code=None)['result']
-                if save_result == 'success':
-                    return Response({'successfully saved': location_name})
-                elif save_result == 'duplicate':
-                    return Response({"errors": "This data already exists in the database."},
-                                    status=status.HTTP_400_BAD_REQUEST)
-            else:
-                return Response({"errors": "Connection timeout"},
-                                status=status.HTTP_400_BAD_REQUEST)
-"""
 
 class ScheduleViewSet(viewsets.ModelViewSet):
     queryset = Schedule.objects.all()
@@ -92,27 +62,51 @@ class ShopViewSet(viewsets.ModelViewSet):
     queryset = Shop.objects.all()
     serializer_class = ShopSerializer
     permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
-"""
+
     def create(self, request, **kwargs):
-        if request.POST.get('datastore'):
-            #
-        else:
-            shop_name=request.POST.get('shop_name')
-            shop_owner=request.user
-            try:
-                location=save_location(request)['location']
-            except Exception:
-                return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-            try:
-                shop=Shop.objects.get(shop_name=shop_name,shop_location=location)
-                return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-            except Shop.DoesNotExist:
-                shop = Shop.objects.create_shop(shop_name=shop_name, user_editable=True, registered_by=shop_owner, updated_by=shop_owner, shop_owner=shop_owner, shop_location=location)
-                return Response({'successfully saved': shop.shop_name})
-            except Shop.MultipleObjectsReturned:
-                shop=Shop.objects.filter(shop_name=shop_name,location=location).order_by('id').first()
-                return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-"""
+        shop_name=request.POST.get('shop_name')
+        shop_owner=request.user
+        show_owner_name = request.user.username
+        shop_location = request.POST.get('shop_location')
+        try:
+            shop=Shop.objects.get(shop_name=shop_name,shop_location=location)
+            return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+        except Shop.DoesNotExist:
+            shop = Shop.objects.create_shop(shop_name=shop_name, user_editable=True, registered_by=shop_owner_name, updated_by=shop_owner_name, shop_owner=shop_owner, shop_location=shop_location)
+            return Response({'successfully saved': shop.shop_name})
+        except Shop.MultipleObjectsReturned:
+            shop=Shop.objects.filter(shop_name=shop_name,location=location).order_by('id').first()
+            return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+
+
+class ShopItemViewSet(viewsets.ModelViewSet):
+    queryset = ShopItem.objects.all()
+    serializer_class = ShopItemSerializer
+    permission_classes = (IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+
+    def create(self, request, **kwargs):
+        item_name=request.POST.get('item_name')
+        image_url=request.POST.get('image_url')
+        item_description=request.POST.get('item_description')
+        price=request.POST.get('price')
+        category=request.POST.get('category')
+        shop_name=request.POST.get('shop_name')
+        shop_location = request.POST.get('shop_location')
+        #user_name = request.user.username
+        try:
+            shop=Shop.objects.get(shop_name=shop_name,shop_location=location)
+        except Exception:
+            return Response({"errors": "the shop associated with the item was not found."},status=status.HTTP_400_BAD_REQUEST)
+        try:
+            shop_item=ShopItem.objects.get(item_name=item_name,shop=shop)
+            return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+        except Shop.DoesNotExist:
+            shop_item = ShopItem.objects.create_shopItem(item_name, image_url, item_description, price, category, shop)
+            return Response({'successfully saved': shop_item.item_name})
+        except Shop.MultipleObjectsReturned:
+            shop_item=ShopItem.objects.filter(item_name=item_name,shop=shop).order_by('id').first()
+            return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
+
 
 class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()

@@ -82,25 +82,29 @@ class Tutor(models.Model):
 
 
 class ShopManager(models.Manager):
-    def create_shop(self, shop_name=None, user_editable=None, registered_by=None, updated_by=None, shop_owner=None, shop_location=None):
-        shop = self.create(shop_name=shop_name, user_editable=user_editable, registered_by=registered_by, updated_by=updated_by, shop_owner=shop_owner, shop_location=shop_location)
+    def create_shop(self, shop_name=None, registered_by=None, updated_by=None, shop_owner=None, shop_location=None):
+#        shop = self.create(shop_name=shop_name, user_editable=user_editable, registered_by=registered_by, updated_by=updated_by, shop_owner=shop_owner, shop_location=shop_location)
+        shop = self.create(restaurant_name=restaurant_name, registered_by=registered_by, updated_by=updated_by, shop_owner=shop_owner, shop_location=shop_location)
         return shop
 
 
 class Shop(models.Model):
-    shop_name = models.CharField(max_length=200)
-    user_editable = models.BooleanField(default=False)
-    original_id = models.BigIntegerField(null=True, blank=True)
-    floor = models.CharField(max_length=25, null=True, blank=True)
+    restaurant_name = models.CharField(max_length=200)
+    cuisine_type =  models.CharField(max_length=50)
+#    user_editable = models.BooleanField(default=False)
+#    original_id = models.BigIntegerField(null=True, blank=True)
+#    floor = models.CharField(max_length=25, null=True, blank=True)
     referUrl = models.URLField(null=True, blank=True)
-    remarks = models.CharField(max_length=25, null=True, blank=True)
-    tel = models.CharField(max_length=12)
+#    remarks = models.CharField(max_length=25, null=True, blank=True)
+    tel = models.CharField(max_length=12,null=True,blank=True)
     registered_by = models.CharField(max_length=100)
     updated_by = models.CharField(max_length=100)
     registered_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now_add=True)
     shop_owner = models.ForeignKey(User, related_name="shop_owner", on_delete=models.CASCADE)
-    shop_location = models.ForeignKey(Location, related_name="shop_location", on_delete=models.CASCADE)
+    shop_location =  models.CharField(max_length=100)
+    #shop_location = models.ForeignKey(Location, related_name="shop_location", on_delete=models.CASCADE)
+#    shop_item = models.ForeignKey(ShopItem, related_name="shop_item", on_delete=models.CASCADE)
     objects = ShopManager()
 
 
@@ -173,17 +177,19 @@ class Schedule(models.Model):
 
 
 class ShopItemManager(models.Manager):
-    def create_shopItem(self, name=None, pictureUrl = None, description = None, price = None):
-        shop_item = self.create(name=name, pictureUrl=pictureUrl, description=description, price=price)
+    def create_shopItem(item_name=None, image_url = None, item_description = None, price = None,category=None,shop=None):
+        shop_item = self.create(item_name=item_name, image_url=image_url, item_description=item_description, price=price, category=category,shop=shop)
         return shop_item
 
 
 class ShopItem(models.Model):
-    name = models.CharField(max_length=300)
-    pictureUrl = models.URLField(null=True, blank=True)
-    description = models.CharField(max_length = 500)
+    item_name = models.CharField(max_length=300)
+    image_url = models.URLField(null=True, blank=True)
+    item_description = models.CharField(max_length = 500)
     price = models.CharField(max_length = 500)
     category = models.CharField(max_length=500)
+    shop = models.ForeignKey(Shop, related_name="shop", on_delete=models.CASCADE)
+    objects = ShopItemManager()
 
 
 class Category(models.Model):

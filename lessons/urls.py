@@ -3,7 +3,7 @@ from django.contrib import admin
 from rest_framework.urlpatterns import format_suffix_patterns
 from django.contrib.auth import views as auth_views
 from lessons import views
-from .views import UserViewSet, UserDetailViewSet, LocationViewSet, ShopViewSet
+from .views import UserViewSet, UserDetailViewSet, LocationViewSet, ShopViewSet, ShopItemViewSet
 from .views import EventViewSet, TagViewSet, ScheduleViewSet, TutorViewSet
 from rest_framework.routers import DefaultRouter
 from rest_framework import renderers
@@ -19,6 +19,7 @@ router.register(r'location', LocationViewSet)
 router.register(r'users', UserViewSet)
 router.register(r'user_detail', UserDetailViewSet)
 router.register(r'shop', ShopViewSet)
+router.register(r'shop_item', ShopItemViewSet)
 router.register(r'event', EventViewSet)
 router.register(r'tag', TagViewSet)
 router.register(r'schedule', ScheduleViewSet)
