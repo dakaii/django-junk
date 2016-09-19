@@ -6,6 +6,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings
 from django.contrib.postgres.fields import ArrayField
+import json
 
 
 # This code is triggered whenever a new user has been created and saved to the database
@@ -202,8 +203,7 @@ class ShopItem(models.Model):
         data['item_description'] = self.item_description
         data['price'] = self.price
         data['image_url'] = self.image_url
-        return json.dumps(data)
-        #return '%s: %s' % (self.item_name, self.category)
+        return json.dumps(data, indent=4)
 
 
 class Category(models.Model):
