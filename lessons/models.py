@@ -82,14 +82,14 @@ class Tutor(models.Model):
 
 
 class ShopManager(models.Manager):
-    def create_shop(self, shop_name=None, registered_by=None, updated_by=None, shop_owner=None, shop_location=None):
+    def create_shop(self, shop_name=None,cuisine_type=None,referUrl=None,tel=None, registered_by=None, updated_by=None, shop_owner=None, shop_location=None):
 #        shop = self.create(shop_name=shop_name, user_editable=user_editable, registered_by=registered_by, updated_by=updated_by, shop_owner=shop_owner, shop_location=shop_location)
-        shop = self.create(restaurant_name=restaurant_name, registered_by=registered_by, updated_by=updated_by, shop_owner=shop_owner, shop_location=shop_location)
+        shop = self.create(shop_name=shop_name, cuisine_type=cuisine_type, referUrl=referUrl, tel=tel, registered_by=registered_by, updated_by=updated_by, shop_owner=shop_owner, shop_location=shop_location)
         return shop
 
 
 class Shop(models.Model):
-    restaurant_name = models.CharField(max_length=200)
+    shop_name = models.CharField(max_length=200)
     cuisine_type =  models.CharField(max_length=50)
 #    user_editable = models.BooleanField(default=False)
 #    original_id = models.BigIntegerField(null=True, blank=True)

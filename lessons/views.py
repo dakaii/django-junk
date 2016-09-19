@@ -65,14 +65,17 @@ class ShopViewSet(viewsets.ModelViewSet):
 
     def create(self, request, **kwargs):
         shop_name=request.POST.get('shop_name')
+        cuisine_type=request.POST.get('cuisine_type')
+        referUrl=request.POST.get('referUrl')
+        tel=request.POST.get('tel')
+        shop_location=request.POST.get('shop_location')
         shop_owner=request.user
         show_owner_name = request.user.username
-        shop_location = request.POST.get('shop_location')
         try:
             shop=Shop.objects.get(shop_name=shop_name,shop_location=location)
             return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
         except Shop.DoesNotExist:
-            shop = Shop.objects.create_shop(shop_name=shop_name, user_editable=True, registered_by=shop_owner_name, updated_by=shop_owner_name, shop_owner=shop_owner, shop_location=shop_location)
+            shop = Shop.objects.create_shop(shop_name=shop_name, cuisine_type=cuisine_type, referUrl=referUrl,tel=tel, registered_by=shop_owner_name, updated_by=shop_owner_name, shop_owner=shop_owner, shop_location=shop_location)
             return Response({'successfully saved': shop.shop_name})
         except Shop.MultipleObjectsReturned:
             shop=Shop.objects.filter(shop_name=shop_name,location=location).order_by('id').first()
