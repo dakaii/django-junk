@@ -13,8 +13,8 @@ http POST 127.0.0.1:8000/token_auth/ username='Daiki Nakashita' password='fAsSrU
 
 http  -f POST https://qro.herokuapp.com/token_auth/ username='Daiki Nakashita' password='fAsSrU68Wd'
 http  -f POST https://qro.herokuapp.com/authentication/ username='chime' password='charin' location=omotesandou email=chime@gmail.com
-http  -f POST https://qro.herokuapp.com/shop/ shop_name='sushi shop'  cuisine_type='Japanese' referUrl='' tel='' shop_location='tokyo' 'Authorization: Token ef547a1f681a5199ce6e3fb702b034d2101ef362'
-http  -f POST https://qro.herokuapp.com/shop_item/ item_name='sushi'  image_url='' item_description='awesome' price='3' shop_name='sushi shop' shop_location='tokyo' 'Authorization: Token ef547a1f681a5199ce6e3fb702b034d2101ef362'
+http  -f POST https://qro.herokuapp.com/shop/ shop_name='sushi shop'  cuisine_type='Japanese' referUrl='' tel='' shop_location='tokyo' 'Authorization: Token d8cd0a1fca657e589e80e2f68a229814aba1f14c'
+http  -f POST https://qro.herokuapp.com/shop_item/ item_name='sushi'  image_url='' item_description='awesome' price='3' shop_name='sushi shop' shop_location='tokyo' 'Authorization: Token d8cd0a1fca657e589e80e2f68a229814aba1f14c'
 
 
 http -f POST http://127.0.0.1:8000/authentication/ access_token=EAAJGUqTLHZAkBAOPpz0kUymHMjnl3o3tF1cZAEm0llZAoZAE1agUzRbOWhKYp5g5DNk0yWWXDbbI2xIhpVyjeShNhUpAkuZBgXlaZCJzOx5eYZARzZCUZCZAEjwUxBEEtQlvCAeN8n2RWjlydRwPiWkI7iwR4bZA8VXDhz0mIpIt590EYYZBRLfRGKo1
