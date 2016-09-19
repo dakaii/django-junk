@@ -197,13 +197,7 @@ class ShopItem(models.Model):
         ordering = ['category']
     
     def __str__(self):
-        data = dict()
-        data['category'] = self.category
-        data['item_name'] = self.item_name
-        data['item_description'] = self.item_description
-        data['price'] = self.price
-        data['image_url'] = self.image_url
-        return json.dumps(data, indent=4)
+        return '%s: %s' % (self.category , self.item_name)
 
 
 class Category(models.Model):
