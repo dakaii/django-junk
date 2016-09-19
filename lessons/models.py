@@ -90,7 +90,7 @@ class ShopManager(models.Manager):
 
 class Shop(models.Model):
     shop_name = models.CharField(max_length=200)
-    cuisine_type =  models.CharField(max_length=50)
+    cuisine_type = models.CharField(max_length=50)
 #    user_editable = models.BooleanField(default=False)
 #    original_id = models.BigIntegerField(null=True, blank=True)
 #    floor = models.CharField(max_length=25, null=True, blank=True)
@@ -177,7 +177,7 @@ class Schedule(models.Model):
 
 
 class ShopItemManager(models.Manager):
-    def create_shopItem(item_name=None, image_url = None, item_description = None, price = None,category=None,shop=None):
+    def create_shopItem(self, item_name=None, image_url = None, item_description = None, price = None,category=None,shop=None):
         shop_item = self.create(item_name=item_name, image_url=image_url, item_description=item_description, price=price, category=category,shop=shop)
         return shop_item
 
@@ -185,9 +185,9 @@ class ShopItemManager(models.Manager):
 class ShopItem(models.Model):
     item_name = models.CharField(max_length=300)
     image_url = models.URLField(null=True, blank=True)
-    item_description = models.CharField(max_length = 500)
-    price = models.CharField(max_length = 500)
-    category = models.CharField(max_length=500)
+    item_description = models.CharField(max_length = 500,null=True, blank=True)
+    price = models.CharField(max_length = 500,null=True, blank=True)
+    category = models.CharField(max_length=500,null=True, blank=True)
     shop = models.ForeignKey(Shop, related_name="shop", on_delete=models.CASCADE)
     objects = ShopItemManager()
 

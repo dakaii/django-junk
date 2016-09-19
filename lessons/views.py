@@ -70,9 +70,9 @@ class ShopViewSet(viewsets.ModelViewSet):
         tel=request.POST.get('tel')
         shop_location=request.POST.get('shop_location')
         shop_owner=request.user
-        show_owner_name = request.user.username
+        shop_owner_name = request.user.username
         try:
-            shop=Shop.objects.get(shop_name=shop_name,shop_location=location)
+            shop=Shop.objects.get(shop_name=shop_name,shop_location=shop_location)
             return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
         except Shop.DoesNotExist:
             shop = Shop.objects.create_shop(shop_name=shop_name, cuisine_type=cuisine_type, referUrl=referUrl,tel=tel, registered_by=shop_owner_name, updated_by=shop_owner_name, shop_owner=shop_owner, shop_location=shop_location)
@@ -97,16 +97,16 @@ class ShopItemViewSet(viewsets.ModelViewSet):
         shop_location = request.POST.get('shop_location')
         #user_name = request.user.username
         try:
-            shop=Shop.objects.get(shop_name=shop_name,shop_location=location)
+            shop=Shop.objects.get(shop_name=shop_name,shop_location=shop_location)
         except Exception:
             return Response({"errors": "the shop associated with the item was not found."},status=status.HTTP_400_BAD_REQUEST)
         try:
             shop_item=ShopItem.objects.get(item_name=item_name,shop=shop)
             return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
-        except Shop.DoesNotExist:
-            shop_item = ShopItem.objects.create_shopItem(item_name, image_url, item_description, price, category, shop)
+        except ShopItem.DoesNotExist:
+            shop_item = ShopItem.objects.create_shopItem(item_name=item_name, image_url=image_url, item_description=item_description, price=price, category=category, shop=shop)
             return Response({'successfully saved': shop_item.item_name})
-        except Shop.MultipleObjectsReturned:
+        except ShopItem.MultipleObjectsReturned:
             shop_item=ShopItem.objects.filter(item_name=item_name,shop=shop).order_by('id').first()
             return Response({"errors": "This data already exists in the database."},status=status.HTTP_400_BAD_REQUEST)
 
