@@ -20,12 +20,13 @@ class TutorSerializer(serializers.ModelSerializer):
 
 
 class ShopSerializer(serializers.ModelSerializer):
-    shop_owner = serializers.StringRelatedField(many=True)
-    shop_location = serializers.StringRelatedField()
-    tutor = TutorSerializer(read_only=True, many=True, required=False)
+#    shop_owner = serializers.StringRelatedField(many=True)
+    shop_owner = serializers.StringRelatedField()
+#    shop_location = serializers.StringRelatedField()
+    shop_item = serializers.StringRelatedField(many=True)
     class Meta:
         model = Shop
-        fields = ('id', 'shop_owner', 'shop_location', 'tutor')
+        fields = ('id', 'shop_owner', 'shop_location', 'cuisine_type','shop_item')
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -66,7 +67,7 @@ class CourseSerializer(serializers.ModelSerializer):
 class ShopItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShopItem
-        fields = ('id', 'item_name')
+        fields = ('id', 'item_name','category','image_url','item_description','price')
 
 """
 class TagMappingSerializer(serializers.ModelSerializer):
