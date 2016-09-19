@@ -188,8 +188,15 @@ class ShopItem(models.Model):
     item_description = models.CharField(max_length = 500,null=True, blank=True)
     price = models.CharField(max_length = 500,null=True, blank=True)
     category = models.CharField(max_length=500,null=True, blank=True)
-    shop = models.ForeignKey(Shop, related_name="shop", on_delete=models.CASCADE)
+    shop = models.ForeignKey(Shop, related_name="shop_item", on_delete=models.CASCADE)
     objects = ShopItemManager()
+
+    class Meta:
+        #unique_together = ('album', 'order')
+        ordering = ['category']
+    
+    def __str__(self):
+        return '%s: %s' % (self.item_name, self.category)
 
 
 class Category(models.Model):

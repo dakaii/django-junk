@@ -46,11 +46,10 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField()
     
     class Meta:
         model = Schedule
-        fields = ('id', 'user')
+        fields = ('id')
 
 
 class TutorSerializer(serializers.ModelSerializer):
@@ -85,7 +84,7 @@ class ShopItemSerializer(serializers.ModelSerializer):
 #    shop_item = serializers.StringRelatedField()
     class Meta:
         model = ShopItem
-        fields = ('id','name','pictureUrl','description','price')
+        fields = ('id','item_name','image_url','item_description','price')
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -100,7 +99,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
     location = serializers.StringRelatedField()
     class Meta:
         model = User
-        fields = ('id','user','first_name','last_name','email','location')
+        fields = ('id','username','first_name','last_name','email','location')
 
 
 #--------------------

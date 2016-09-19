@@ -22,8 +22,8 @@ http -f POST http://127.0.0.1:8000/authentication/ access_token=EAAJGUqTLHZAkBAO
 
 http -f POST http://127.0.0.1:8000/authentication/ username='chime' password='charin' location=omotesandou email=chime@gmail.com
 http -f POST http://127.0.0.1:8000/authentication/ username='chime' password='charin' location=omotesandou email=123@gmail.com
-http  -f POST http://127.0.0.1:8000/shop/ shop_name='sushi shop'  cuisine_type='Japanese' referUrl='' tel='' shop_location='tokyo' 'Authorization: Token 1122ed876b8339773299eec531054c5eaad32689'
-http  -f POST http://127.0.0.1:8000/shop_item/ item_name='sushi'  image_url='' item_description='awesome' price='3' shop_name='sushi shop' shop_location='tokyo' 'Authorization: Token 1122ed876b8339773299eec531054c5eaad32689'
+http  -f POST http://127.0.0.1:8000/shop/ shop_name='sushi shop'  cuisine_type='Japanese' referUrl='' tel='' shop_location='tokyo' 'Authorization: Token c0a5ce5edfb02676c219dbdc3c2963f528c55b34'
+http  -f POST http://127.0.0.1:8000/shop_item/ item_name='sushi'  image_url='' item_description='awesome' price='3' shop_name='sushi shop' shop_location='tokyo' 'Authorization: Token c0a5ce5edfb02676c219dbdc3c2963f528c55b34'
 
 
 
