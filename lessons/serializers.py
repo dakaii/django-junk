@@ -26,7 +26,7 @@ class ShopSerializer(serializers.ModelSerializer):
     shop_item = serializers.StringRelatedField(many=True)
     class Meta:
         model = Shop
-        fields = ('id', 'shop_owner', 'shop_location', 'cuisine_type','shop_item')
+        fields = ('id', 'shop_name', 'shop_owner', 'shop_location', 'cuisine_type','shop_item')
 
 
 class EventSerializer(serializers.ModelSerializer):
